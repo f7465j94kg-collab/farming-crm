@@ -1,0 +1,15 @@
+adx_attachfilestoragelocation: 756150000
+adx_captcharequired: false
+adx_containername: ''
+adx_entityformid: 190b16b4-b72a-4a75-bf0d-e01f889699a5
+adx_entityname: wi_peticionaproducto
+adx_entitypermissionsenabled: true
+adx_formname: Nueva Peticion a Producto
+adx_hideformonsuccess: true
+adx_maximumnooffiles: 5
+adx_mode: 100000000
+adx_name: Nueva Peticion a Producto
+adx_onsuccess: 756150001
+adx_redirectwebpage: f956e2cb-3e3e-61d6-f615-eb8161786232
+adx_showcaptchaforauthenticatedusers: false
+adx_storageaccountname: ''

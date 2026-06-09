@@ -1,0 +1,86 @@
+{% assign n1id = request.params.n1 %}
+
+{% fetchxml items %}
+<fetch>
+  <entity name="wi_n2">
+    <attribute name="wi_n2id" />
+    <link-entity name="wi_catalogoconfig" from="wi_catalogoconfigid" to="wi_catalogoconfig" alias="cat" link-type="outer">
+      <attribute name="wi_nombreaccesorio" />
+      <attribute name="wi_pvpcalculado" />
+      <order attribute="wi_nombreaccesorio" />
+    </link-entity>
+    {% if n1id %}
+    <filter type="and">
+      <condition attribute="wi_n1" operator="eq" value="{{ n1id | xml_escape }}" />
+    </filter>
+    {% endif %}
+  </entity>
+</fetch>
+{% endfetchxml %}
+
+{% include 'Configurador Core' %}
+
+<div id="mainContent" class="wrapper-body" role="main">
+  <div class="cfg-wrap">
+    {% include 'Configurador Stepper' current: 'n2' %}
+    <div class="cfg-layout">
+      <main class="cfg-main">
+        <h2 class="cfg-h2">Configuración N2</h2>
+        {% if items.results.entities.size > 0 %}
+        <div class="cfg-panel">
+          <div class="cfg-panel-head">Accesorio</div>
+          <div id="cfgList">
+            {% for r in items.results.entities %}
+            <label class="cfg-opt">
+              <input type="radio" name="cfgsel" value="{{ r.wi_n2id }}"
+                     data-label="{{ r['cat.wi_nombreaccesorio'] | escape }}" data-price="{{ r['cat.wi_pvpcalculado'] }}"
+                     onclick="cfgSelect(this)" />
+              <span class="cfg-opt-name">{{ r['cat.wi_nombreaccesorio'] | escape }}</span>
+              <span class="cfg-opt-dots"></span>
+              <span class="cfg-opt-price"></span>
+            </label>
+            {% endfor %}
+          </div>
+        </div>
+        <div class="cfg-nav">
+          <button type="button" class="cfg-btn cfg-btn-ghost" onclick="history.back()">Atrás</button>
+          <button type="button" id="cfgNext" class="cfg-btn cfg-btn-primary" disabled onclick="cfgGoNext()">Siguiente</button>
+        </div>
+        {% else %}
+        <p class="cfg-sum-empty">No hay opciones para esta configuración.</p>
+        {% endif %}
+      </main>
+      <aside class="cfg-side">{% include 'Resumen Pedido' %}</aside>
+    </div>
+  </div>
+</div>
+
+<script>
+  var STEP_KEY = 'n2';
+  var NEXT_BASE = '/n3?n2=';
+
+  function cfgSelect(input) {
+    window.CFG.setStep(STEP_KEY, {
+      id: input.value,
+      label: input.getAttribute('data-label'),
+      price: Number(input.getAttribute('data-price') || 0)
+    });
+    document.getElementById('cfgNext').disabled = false;
+  }
+  function cfgGoNext() {
+    var sel = document.querySelector('input[name="cfgsel"]:checked');
+    if (sel) location.href = NEXT_BASE + sel.value;
+  }
+  document.addEventListener('DOMContentLoaded', function () {
+    document.querySelectorAll('#cfgList .cfg-opt').forEach(function (opt) {
+      var inp = opt.querySelector('input'), ps = opt.querySelector('.cfg-opt-price');
+      var pr = Number(inp.getAttribute('data-price') || 0);
+      ps.textContent = pr > 0 ? window.CFG.fmt(pr) : '—';
+    });
+    var saved = window.CFG.get()[STEP_KEY];
+    if (saved) {
+      var r = document.querySelector('input[value="' + saved.id + '"]');
+      if (r) { r.checked = true; document.getElementById('cfgNext').disabled = false; }
+    }
+  });
+</script>

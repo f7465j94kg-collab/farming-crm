@@ -1,0 +1,85 @@
+{
+  "layout": {
+    "id": "layout2",
+    "options": {
+      "rearrangeEnabled": {
+        "image": true,
+        "title": true,
+        "description": true,
+        "button": true,
+        "textHyperlink": true,
+        "customText1": true,
+        "customText2": true
+      },
+      "hidden": {
+        "image": false,
+        "title": false,
+        "description": true,
+        "button": false,
+        "textHyperlink": true,
+        "customText1": true,
+        "customText2": true
+      },
+      "index": {
+        "image": 0,
+        "title": 1,
+        "button": 2,
+        "description": 3,
+        "textHyperlink": 4,
+        "customText1": 5,
+        "customText2": 6
+      },
+      "searchEnabled": false
+    },
+    "configurations": {
+      "gallery": {
+        "type": "grid",
+        "overflow": "scroll",
+        "cards": {
+          "elements": {
+            "button": {
+              "openInNewTab": false,
+              "appearance": "primary"
+            },
+            "textHyperlink": {
+              "openInNewTab": false,
+              "linkStyle": "underline"
+            },
+            "customText1": "p",
+            "customText2": "p",
+            "image": {
+              "size": "scale_to_fill"
+            },
+            "title": "h4",
+            "description": "p"
+          }
+        }
+      }
+    }
+  },
+  "data": {
+    "entityLogicalName": "wi_fabricante",
+    "viewId": "a2832c8f-6864-4d41-9372-2f3f7feb29c5",
+    "elements": {
+      "image": "",
+      "title": "wi_fabricante",
+      "description": "",
+      "button": {
+        "label": "wi_fabricante",
+        "labelType": "DataColumn",
+        "linkType": "DataColumn",
+        "hyperlink": ""
+      },
+      "textHyperlink": {
+        "label": "",
+        "labelType": "",
+        "linkType": "",
+        "hyperlink": ""
+      },
+      "customText1": "",
+      "customText2": ""
+    }
+  },
+  "name": "",
+  "style": {}
+}

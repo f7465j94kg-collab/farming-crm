@@ -1,0 +1,47 @@
+{% fetchxml fabricantes %}
+<fetch>
+  <entity name="wi_fabricante">
+    <attribute name="wi_fabricanteid" />
+    <attribute name="wi_fabricante" />
+    <order attribute="wi_fabricante" />
+  </entity>
+</fetch>
+{% endfetchxml %}
+
+{% include 'Configurador Core' %}
+
+<div id="mainContent" class="wrapper-body" role="main">
+  <div class="cfg-wrap">
+    {% include 'Configurador Stepper' current: 'fabricante' %}
+    <div class="cfg-layout">
+      <main class="cfg-main">
+        <h2 class="cfg-h2">Selecciona la marca</h2>
+        <div class="cfg-cards">
+          {% for f in fabricantes.results.entities %}
+          <a class="cfg-card" href="#"
+             data-id="{{ f.wi_fabricanteid }}" data-label="{{ f.wi_fabricante | escape }}"
+             onclick="cfgPickFab(this); return false;">
+            <div class="cfg-card-img">
+              <img src="/_api/wi_fabricantes({{ f.wi_fabricanteid }})/wi_imagenfabricante/$value"
+                   alt="{{ f.wi_fabricante | escape }}"
+                   style="width:100%;height:100%;max-width:none;max-height:none;object-fit:cover;"
+                   onerror="this.style.display='none'" />
+            </div>
+            <div class="cfg-card-body">
+              <div class="cfg-card-title">{{ f.wi_fabricante | escape }}</div>
+            </div>
+          </a>
+          {% endfor %}
+        </div>
+      </main>
+      <aside class="cfg-side">{% include 'Resumen Pedido' %}</aside>
+    </div>
+  </div>
+</div>
+
+<script>
+  function cfgPickFab(el) {
+    window.CFG.setStep('fabricante', { id: el.getAttribute('data-id'), label: el.getAttribute('data-label') });
+    location.href = '/producto?fabricante=' + el.getAttribute('data-id');
+  }
+</script>

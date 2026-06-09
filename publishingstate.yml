@@ -1,0 +1,10 @@
+- adx_displayorder: 2
+  adx_isdefault: true
+  adx_isvisible: true
+  adx_name: Publicado
+  adx_publishingstateid: 2d61ec4e-9195-4572-b365-e60cc89687a8
+- adx_displayorder: 1
+  adx_isdefault: false
+  adx_isvisible: false
+  adx_name: Borrador
+  adx_publishingstateid: a8abc23f-017c-4bb1-a59b-0e0351095b79

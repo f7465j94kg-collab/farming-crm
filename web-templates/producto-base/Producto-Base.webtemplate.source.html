@@ -1,0 +1,85 @@
+{% assign pid = request.params.producto %}
+
+{% fetchxml modelos %}
+<fetch>
+  <entity name="wi_productobasefarming">
+    <attribute name="wi_productobasefarmingid" />
+    <attribute name="wi_nombreproducto" />
+    <attribute name="wi_pvp" />
+    <attribute name="wi_productobasefabricante" />
+    <order attribute="wi_nombreproducto" />
+    {% if pid %}
+    <filter type="and">
+      <condition attribute="wi_productobasefabricante" operator="eq" value="{{ pid | xml_escape }}" />
+    </filter>
+    {% endif %}
+  </entity>
+</fetch>
+{% endfetchxml %}
+
+{% include 'Configurador Core' %}
+
+<div id="mainContent" class="wrapper-body" role="main">
+  <div class="cfg-wrap">
+    {% include 'Configurador Stepper' current: 'productobase' %}
+    <div class="cfg-layout">
+      <main class="cfg-main">
+        <h2 class="cfg-h2">Selecciona el modelo</h2>
+        {% if modelos.results.entities.size > 0 %}
+        <div class="cfg-panel">
+          <div class="cfg-panel-head">Modelo</div>
+          <div id="cfgList">
+            {% for m in modelos.results.entities %}
+            <label class="cfg-opt">
+              <input type="radio" name="cfgsel" value="{{ m.wi_productobasefarmingid }}"
+                     data-label="{{ m.wi_nombreproducto | escape }}" data-price="{{ m.wi_pvp }}"
+                     onclick="cfgSelect(this)" />
+              <span class="cfg-opt-name">{{ m.wi_nombreproducto | escape }}</span>
+              <span class="cfg-opt-dots"></span>
+              <span class="cfg-opt-price"></span>
+            </label>
+            {% endfor %}
+          </div>
+        </div>
+        <div class="cfg-nav">
+          <button type="button" class="cfg-btn cfg-btn-ghost" onclick="history.back()">Atrás</button>
+          <button type="button" id="cfgNext" class="cfg-btn cfg-btn-primary" disabled onclick="cfgGoNext()">Siguiente</button>
+        </div>
+        {% else %}
+        <p class="cfg-sum-empty">No hay modelos para este producto.</p>
+        {% endif %}
+      </main>
+      <aside class="cfg-side">{% include 'Resumen Pedido' %}</aside>
+    </div>
+  </div>
+</div>
+
+<script>
+  var STEP_KEY = 'productobase';
+  var NEXT_BASE = '/n1?base=';
+
+  function cfgSelect(input) {
+    window.CFG.setStep(STEP_KEY, {
+      id: input.value,
+      label: input.getAttribute('data-label'),
+      price: Number(input.getAttribute('data-price') || 0)
+    });
+    document.getElementById('cfgNext').disabled = false;
+  }
+  function cfgGoNext() {
+    var sel = document.querySelector('input[name="cfgsel"]:checked');
+    if (sel) location.href = NEXT_BASE + sel.value;
+  }
+  document.addEventListener('DOMContentLoaded', function () {
+    document.querySelectorAll('#cfgList .cfg-opt').forEach(function (opt) {
+      var inp = opt.querySelector('input'), ps = opt.querySelector('.cfg-opt-price');
+      var pr = Number(inp.getAttribute('data-price') || 0);
+      ps.textContent = pr > 0 ? window.CFG.fmt(pr) : '—';
+    });
+    var saved = window.CFG.get()[STEP_KEY];
+    if (saved) {
+      var r = document.querySelector('input[value="' + saved.id + '"]');
+      if (r) { r.checked = true; document.getElementById('cfgNext').disabled = false; }
+    }
+  });
+</script>

@@ -1,0 +1,12 @@
+adx_append: true
+adx_appendto: false
+adx_create: true
+adx_delete: false
+adx_entitylogicalname: annotation
+adx_entityname: Cuentas activas - Global Access_Attachment
+adx_entitypermissionid: 7cf54c7a-e7d5-44d4-819d-ac546ca344d4
+adx_parententitypermission: 2b1ade48-fff4-4b08-8efb-957b1ae42d2d
+adx_parentrelationship: account_Annotations
+adx_read: false
+adx_scope: 756150003
+adx_write: false

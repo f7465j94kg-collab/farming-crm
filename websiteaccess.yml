@@ -1,0 +1,14 @@
+- adx_managecontentsnippets: true
+  adx_managesitemarkers: true
+  adx_manageweblinksets: true
+  adx_name: Permisos administrativos para el portal básico
+  adx_previewunpublishedentities: true
+  adx_websiteaccess_webrole:
+  - 8c1a1c1d-eedd-4cd3-b42f-216d2c2873d9
+  adx_websiteaccessid: 098ba275-d91f-43f7-868e-b3bed5698708
+- adx_managecontentsnippets: false
+  adx_managesitemarkers: false
+  adx_manageweblinksets: false
+  adx_name: Permiso de vista previa para el portal básico
+  adx_previewunpublishedentities: true
+  adx_websiteaccessid: 954a0589-c7c3-41ea-a9b0-9df9acbfdff8

@@ -1,0 +1,17 @@
+adx_attachfilestoragelocation: 756150000
+adx_captcharequired: false
+adx_containername: ''
+adx_entityformid: c126551a-37f0-451a-959a-17724a339b39
+adx_entityname: wi_oportunidadfarming
+adx_entitypermissionsenabled: true
+adx_entitysourcetype: 756150001
+adx_formname: Detalle Oportunidad Portal
+adx_hideformonsuccess: true
+adx_maximumnooffiles: 5
+adx_mode: 100000001
+adx_name: Detalle Oportunidad Portal
+adx_onsuccess: 756150001
+adx_recordidquerystringparametername: id
+adx_redirectwebpage: 48d3eb85-a348-7c23-07d5-af362e829b3c
+adx_showcaptchaforauthenticatedusers: false
+adx_storageaccountname: ''

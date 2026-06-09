@@ -1,0 +1,14 @@
+# Claude Code local settings (machine-specific permissions/env)
+.claude/settings.local.json
+
+# OS / editor cruft
+Thumbs.db
+ehthumbs.db
+desktop.ini
+.DS_Store
+*.swp
+*~
+
+# Logs / temp
+*.log
+*.tmp

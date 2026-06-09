@@ -1,0 +1,15 @@
+adx_attachfilestoragelocation: 756150000
+adx_captcharequired: false
+adx_containername: ''
+adx_entityformid: 17f50f57-176d-4a58-bbdc-20b778e90624
+adx_entityname: wi_peticionaproducto
+adx_entitypermissionsenabled: true
+adx_formname: Información
+adx_hideformonsuccess: true
+adx_maximumnooffiles: 5
+adx_mode: 100000000
+adx_name: Información
+adx_onsuccess: 756150001
+adx_redirectwebpage: dd85f595-7053-4ea7-ae8b-6c6e83b3c442
+adx_showcaptchaforauthenticatedusers: false
+adx_storageaccountname: ''

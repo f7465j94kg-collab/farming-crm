@@ -1,0 +1,48 @@
+<h2 class="cfg-sum-title">Resumen del pedido</h2>
+<div class="cfg-sum-card" id="cfgSummary"></div>
+
+<script>
+(function () {
+  function esc(t) { var d = document.createElement('div'); d.textContent = (t == null ? '' : t); return d.innerHTML; }
+
+  function valLine(name, price) {
+    var p = (price != null && Number(price) > 0) ? window.CFG.fmt(price) : '';
+    return '<div class="cfg-sum-v"><span class="nm">' + esc(name) + '</span><span class="dots"></span><span class="pr">' + p + '</span></div>';
+  }
+  function row(label, name, price) {
+    return '<div class="cfg-sum-row"><div class="cfg-sum-k">' + esc(label) + '</div>' + valLine(name, price) + '</div>';
+  }
+
+  function render() {
+    var card = document.getElementById('cfgSummary');
+    if (!card || !window.CFG) return;
+    var s = window.CFG.get();
+    var html = '<div class="cfg-sum-detalle">Detalle</div>';
+    var any = false;
+
+    window.CFG.STEPS.forEach(function (k) {
+      if (k === 'opcionales') return;
+      var v = s[k];
+      if (!v) return;
+      any = true;
+      html += row(window.CFG.LABEL[k], v.label, v.price);
+    });
+
+    if (s.opcionales && s.opcionales.length) {
+      any = true;
+      html += '<div class="cfg-sum-row"><div class="cfg-sum-k">Opcionales</div>';
+      s.opcionales.forEach(function (o) { html += valLine(o.label, o.price); });
+      html += '</div>';
+    }
+
+    if (!any) { card.innerHTML = '<div class="cfg-sum-empty">Aún no has seleccionado nada.</div>'; return; }
+
+    html += '<div class="cfg-sum-total"><span>Total</span><span class="amt">' + window.CFG.fmt(window.CFG.total()) + '</span></div>';
+    card.innerHTML = html;
+  }
+
+  document.addEventListener('cfg:changed', render);
+  document.addEventListener('DOMContentLoaded', render);
+  render();
+})();
+</script>
