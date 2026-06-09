@@ -1,0 +1,187 @@
+{% include 'Configurador Core' %}
+
+<div id="mainContent" class="wrapper-body" role="main">
+  <div class="cfg-wrap">
+    {% include 'Configurador Stepper' current: 'resumen' %}
+
+    <div class="rsm-wrap">
+      <h2 class="cfg-h2">Resumen del pedido</h2>
+      <p class="rsm-sub">Revisa tu configuración antes de confirmar el pedido.</p>
+      <div id="cfgStatus" class="cfg-status" style="display:none;"></div>
+
+      <div class="rsm-card">
+        <div class="rsm-head">Detalle de la configuración</div>
+        <div id="rsmLines" class="rsm-lines"></div>
+        <div class="rsm-total">
+          <span>Total</span>
+          <span class="rsm-total-amt" id="rsmTotal">—</span>
+        </div>
+      </div>
+
+      <div class="rsm-actions">
+        <button type="button" class="cfg-btn cfg-btn-ghost" onclick="history.back()">Atrás</button>
+        <button type="button" id="rsmCrear" class="rsm-cta" onclick="crearPedido()">Crear pedido</button>
+        <button type="button" id="rsmNuevo" class="cfg-btn cfg-btn-primary" style="display:none;" onclick="nuevoPedido()">Nuevo pedido</button>
+      </div>
+    </div>
+  </div>
+</div>
+
+<style>
+  .rsm-wrap { max-width: 760px; margin: 0 auto; }
+  .rsm-sub { color: #6b7280; font-size: 1rem; margin: -0.6rem 0 1.25rem; }
+  .rsm-card { background: #fff; border: 1px solid #eceef1; border-radius: 18px; box-shadow: 0 6px 28px rgba(0,0,0,0.08); overflow: hidden; }
+  .rsm-head { padding: 1.1rem 1.6rem; font-size: 0.8rem; font-weight: 800; letter-spacing: 0.06em; text-transform: uppercase; color: #fff; background: #2aa9e0; }
+  .rsm-lines { padding: 0.2rem 1.6rem; }
+  .rsm-line { display: flex; align-items: baseline; gap: 0.8rem; padding: 1.05rem 0; border-bottom: 1px solid #f0f2f5; }
+  .rsm-line:last-child { border-bottom: none; }
+  .rsm-line-info { flex: 1 1 auto; min-width: 0; }
+  .rsm-line-step { font-size: 0.72rem; font-weight: 700; letter-spacing: 0.05em; text-transform: uppercase; color: #9aa3b2; }
+  .rsm-line-name { font-size: 1.08rem; font-weight: 600; color: #1f2a44; margin-top: 0.12rem; }
+  .rsm-line-price { flex: 0 0 auto; font-size: 1.05rem; font-weight: 700; color: #1a2b4a; white-space: nowrap; }
+  .rsm-total { display: flex; justify-content: space-between; align-items: center; padding: 1.3rem 1.6rem; background: #f6fbfe; border-top: 2px solid #1f2a44; }
+  .rsm-total > span:first-child { font-size: 1.05rem; font-weight: 800; color: #1a2b4a; text-transform: uppercase; letter-spacing: 0.04em; }
+  .rsm-total-amt { font-size: 1.9rem; font-weight: 800; color: #2aa9e0; }
+  .rsm-actions { display: flex; gap: 0.9rem; align-items: center; margin-top: 1.6rem; }
+  .rsm-cta {
+    flex: 1 1 auto; display: inline-flex; align-items: center; justify-content: center; gap: 0.5rem;
+    padding: 1rem 1.6rem; border: none; border-radius: 12px; background: #2aa9e0; color: #fff;
+    font-size: 1.15rem; font-weight: 800; cursor: pointer; box-shadow: 0 8px 24px rgba(42,169,224,0.4);
+    transition: background 0.15s ease, transform 0.15s ease, opacity 0.15s ease;
+  }
+  .rsm-cta:hover:not(:disabled) { background: #1f93c7; transform: translateY(-2px); }
+  .rsm-cta:disabled { opacity: 0.5; cursor: not-allowed; box-shadow: none; }
+  .rsm-empty { color: #9aa3b2; font-size: 1rem; padding: 2rem 1.6rem; text-align: center; }
+</style>
+
+<script>
+  var SET_OPP = 'wi_oportunidadfarmings';
+  var SET_LINE = 'wi_productlineitemses';
+  var SET_PBF = 'wi_productobasefarmings';
+
+  function esc(t) { var d = document.createElement('div'); d.textContent = (t == null ? '' : t); return d.innerHTML; }
+
+  function showStatus(msg, kind) {
+    var el = document.getElementById('cfgStatus');
+    el.style.display = 'block';
+    el.className = 'cfg-status ' + (kind || '');
+    el.textContent = msg;
+  }
+
+  function lineHtml(step, name, price) {
+    var p = (price != null && Number(price) > 0) ? window.CFG.fmt(price) : '';
+    return '<div class="rsm-line"><div class="rsm-line-info"><div class="rsm-line-step">' + esc(step) +
+           '</div><div class="rsm-line-name">' + esc(name) + '</div></div>' +
+           '<div class="rsm-line-price">' + p + '</div></div>';
+  }
+
+  function render() {
+    if (!window.CFG) return;
+    var s = window.CFG.get();
+    var box = document.getElementById('rsmLines');
+    var html = '', any = false;
+    window.CFG.STEPS.forEach(function (k) {
+      if (k === 'opcionales' || k === 'resumen') return;
+      var v = s[k];
+      if (!v) return;
+      any = true;
+      html += lineHtml(window.CFG.LABEL[k], v.label, v.price);
+    });
+    if (s.opcionales && s.opcionales.length) {
+      any = true;
+      s.opcionales.forEach(function (o) { html += lineHtml('Opcional', o.label, o.price); });
+    }
+    box.innerHTML = any ? html : '<div class="rsm-empty">Aún no has seleccionado nada. Vuelve al configurador.</div>';
+    document.getElementById('rsmTotal').textContent = window.CFG.fmt(window.CFG.total());
+    // enable create only when a model is chosen
+    document.getElementById('rsmCrear').disabled = !(s.productobase && s.productobase.id);
+  }
+
+  function nuevoPedido() {
+    window.CFG.clear();
+    location.href = '/cpq';
+  }
+
+  function getToken() {
+    return new Promise(function (resolve) {
+      if (window.shell && typeof shell.getTokenDeferred === 'function') {
+        shell.getTokenDeferred().done(function (t) { resolve(t); }).fail(function () { resolve(null); });
+      } else {
+        var input = document.querySelector("[name='__RequestVerificationToken']");
+        resolve(input ? input.value : null);
+      }
+    });
+  }
+
+  function apiCreate(set, payload, token) {
+    return fetch('/_api/' + set, {
+      method: 'POST',
+      headers: {
+        'Content-Type': 'application/json', 'Accept': 'application/json',
+        'OData-MaxVersion': '4.0', 'OData-Version': '4.0',
+        'Prefer': 'return=representation', '__RequestVerificationToken': token || ''
+      },
+      body: JSON.stringify(payload)
+    }).then(function (res) {
+      return res.text().then(function (txt) {
+        if (!res.ok) throw new Error('HTTP ' + res.status + ' en ' + set + ': ' + txt);
+        var id = null, loc = res.headers.get('OData-EntityId') || res.headers.get('Location');
+        if (loc) { var m = loc.match(/\(([^)]+)\)/); if (m) id = m[1]; }
+        return { data: txt ? JSON.parse(txt) : {}, id: id };
+      });
+    });
+  }
+
+  function crearPedido() {
+    var s = window.CFG.get();
+    if (!s.productobase || !s.productobase.id) {
+      showStatus('Falta seleccionar el modelo (Producto Base).', 'err');
+      return;
+    }
+    if (!confirm('¿Crear la oportunidad y las líneas del pedido?')) return;
+
+    document.getElementById('rsmCrear').disabled = true;
+    showStatus('Creando oportunidad...');
+
+    getToken().then(function (token) {
+      var oppPayload = { 'wi_ProductoBaseF@odata.bind': '/' + SET_PBF + '(' + s.productobase.id + ')' };
+      return apiCreate(SET_OPP, oppPayload, token).then(function (res) {
+        var oppId = res.id || (res.data && res.data.wi_oportunidadfarmingid);
+        if (!oppId) throw new Error('Oportunidad creada pero no se obtuvo su id.');
+        showStatus('Oportunidad creada. Creando líneas...');
+
+        var ref = '/' + SET_OPP + '(' + oppId + ')';
+        var lines = [];
+        [['n1', 'Nivel 1'], ['n2', 'Nivel 2'], ['n3', 'Nivel 3'], ['n4', 'Nivel 4']].forEach(function (p) {
+          var v = s[p[0]];
+          if (v) lines.push({ nivel: p[1] + ' | ' + v.label, precio: Number(v.price || 0) });
+        });
+        (s.opcionales || []).forEach(function (o) {
+          lines.push({ nivel: 'Opcional | ' + o.label, precio: Number(o.price || 0) });
+        });
+
+        var chain = Promise.resolve();
+        lines.forEach(function (ln) {
+          chain = chain.then(function () {
+            return apiCreate(SET_LINE, {
+              'wi_Oportunidad@odata.bind': ref, 'wi_nivel': ln.nivel, 'wi_precio': ln.precio
+            }, token);
+          });
+        });
+        return chain.then(function () { return lines.length; });
+      });
+    }).then(function (count) {
+      showStatus('✅ Oportunidad y ' + count + ' líneas creadas correctamente.', 'ok');
+      // hide create to avoid double-submit; offer a fresh start
+      document.getElementById('rsmCrear').style.display = 'none';
+      document.getElementById('rsmNuevo').style.display = 'inline-flex';
+    }).catch(function (err) {
+      showStatus('❌ ' + err.message, 'err');
+      document.getElementById('rsmCrear').disabled = false;
+    });
+  }
+
+  document.addEventListener('cfg:changed', render);
+  document.addEventListener('DOMContentLoaded', render);
+  render();
+</script>

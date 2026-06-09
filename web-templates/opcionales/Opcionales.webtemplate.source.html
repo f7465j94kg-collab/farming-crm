@@ -26,7 +26,6 @@
     <div class="cfg-layout">
       <main class="cfg-main">
         <h2 class="cfg-h2">Equipamiento opcional</h2>
-        <div id="cfgStatus" class="cfg-status" style="display:none;"></div>
         {% if items.results.entities.size > 0 %}
         <div class="cfg-panel">
           <div class="cfg-panel-head">Opcionales</div>
@@ -43,126 +42,26 @@
             {% endfor %}
           </div>
         </div>
-        <div class="cfg-nav">
-          <button type="button" class="cfg-btn cfg-btn-ghost" onclick="history.back()">Atrás</button>
-          <button type="button" id="cfgNuevo" class="cfg-btn cfg-btn-primary" style="display:none;" onclick="nuevoPedido()">Nuevo pedido</button>
-        </div>
         {% else %}
         <p class="cfg-sum-empty">No hay opcionales para esta configuración.</p>
         {% endif %}
+        <div class="cfg-nav">
+          <button type="button" class="cfg-btn cfg-btn-ghost" onclick="history.back()">Atrás</button>
+          <button type="button" class="cfg-btn cfg-btn-primary" onclick="location.href='/resumen'">Ver resumen</button>
+        </div>
       </main>
       <aside class="cfg-side">{% include 'Resumen Pedido' %}</aside>
     </div>
   </div>
 </div>
 
-<button id="cfgFab" class="cfg-fab" onclick="crearPedido()" disabled>
-  <span class="cfg-fab-count" id="opcCount">0</span>
-  Crear pedido
-</button>
-
 <script>
-  var SET_OPP = 'wi_oportunidadfarmings';
-  var SET_LINE = 'wi_productlineitemses';
-  var SET_PBF = 'wi_productobasefarmings';
-
-  function showStatus(msg, kind) {
-    var el = document.getElementById('cfgStatus');
-    el.style.display = 'block';
-    el.className = 'cfg-status ' + (kind || '');
-    el.textContent = msg;
-  }
-
-  function nuevoPedido() {
-    window.CFG.clear();
-    location.href = '/cpq';
-  }
-
   function refreshOpc() {
     var arr = [];
     document.querySelectorAll('.opc-check:checked').forEach(function (cb) {
       arr.push({ id: cb.value, label: cb.getAttribute('data-label'), price: Number(cb.getAttribute('data-price') || 0) });
     });
     window.CFG.setOpcionales(arr);
-    document.getElementById('opcCount').textContent = arr.length;
-  }
-
-  function getToken() {
-    return new Promise(function (resolve) {
-      if (window.shell && typeof shell.getTokenDeferred === 'function') {
-        shell.getTokenDeferred().done(function (t) { resolve(t); }).fail(function () { resolve(null); });
-      } else {
-        var input = document.querySelector("[name='__RequestVerificationToken']");
-        resolve(input ? input.value : null);
-      }
-    });
-  }
-
-  function apiCreate(set, payload, token) {
-    return fetch('/_api/' + set, {
-      method: 'POST',
-      headers: {
-        'Content-Type': 'application/json', 'Accept': 'application/json',
-        'OData-MaxVersion': '4.0', 'OData-Version': '4.0',
-        'Prefer': 'return=representation', '__RequestVerificationToken': token || ''
-      },
-      body: JSON.stringify(payload)
-    }).then(function (res) {
-      return res.text().then(function (txt) {
-        if (!res.ok) throw new Error('HTTP ' + res.status + ' en ' + set + ': ' + txt);
-        var id = null, loc = res.headers.get('OData-EntityId') || res.headers.get('Location');
-        if (loc) { var m = loc.match(/\(([^)]+)\)/); if (m) id = m[1]; }
-        return { data: txt ? JSON.parse(txt) : {}, id: id };
-      });
-    });
-  }
-
-  function crearPedido() {
-    var s = window.CFG.get();
-    if (!s.productobase || !s.productobase.id) {
-      showStatus('Falta seleccionar el modelo (Producto Base).', 'err');
-      return;
-    }
-    if (!confirm('¿Crear la oportunidad y las líneas del pedido?')) return;
-
-    document.getElementById('cfgFab').disabled = true;
-    showStatus('Creando oportunidad...');
-
-    getToken().then(function (token) {
-      var oppPayload = { 'wi_ProductoBaseF@odata.bind': '/' + SET_PBF + '(' + s.productobase.id + ')' };
-      return apiCreate(SET_OPP, oppPayload, token).then(function (res) {
-        var oppId = res.id || (res.data && res.data.wi_oportunidadfarmingid);
-        if (!oppId) throw new Error('Oportunidad creada pero no se obtuvo su id.');
-        showStatus('Oportunidad creada. Creando líneas...');
-
-        var ref = '/' + SET_OPP + '(' + oppId + ')';
-        var lines = [];
-        [['n1', 'Nivel 1'], ['n2', 'Nivel 2'], ['n3', 'Nivel 3'], ['n4', 'Nivel 4']].forEach(function (p) {
-          var v = s[p[0]];
-          if (v) lines.push({ nivel: p[1] + ' | ' + v.label, precio: Number(v.price || 0) });
-        });
-        (s.opcionales || []).forEach(function (o) {
-          lines.push({ nivel: 'Opcional | ' + o.label, precio: Number(o.price || 0) });
-        });
-
-        var chain = Promise.resolve();
-        lines.forEach(function (ln) {
-          chain = chain.then(function () {
-            return apiCreate(SET_LINE, {
-              'wi_Oportunidad@odata.bind': ref, 'wi_nivel': ln.nivel, 'wi_precio': ln.precio
-            }, token);
-          });
-        });
-        return chain.then(function () { return lines.length; });
-      });
-    }).then(function (count) {
-      showStatus('✅ Oportunidad y ' + count + ' líneas creadas correctamente.', 'ok');
-      // keep the configuration in memory; fab stays disabled to avoid double-create
-      document.getElementById('cfgNuevo').style.display = 'inline-flex';
-    }).catch(function (err) {
-      showStatus('❌ ' + err.message, 'err');
-      document.getElementById('cfgFab').disabled = false;
-    });
   }
 
   document.addEventListener('DOMContentLoaded', function () {
@@ -177,9 +76,5 @@
     document.querySelectorAll('.opc-check').forEach(function (cb) {
       if (ids.indexOf(cb.value) > -1) cb.checked = true;
     });
-    document.getElementById('opcCount').textContent = saved.length;
-    // enable create only when a model is chosen
-    var s = window.CFG.get();
-    document.getElementById('cfgFab').disabled = !(s.productobase && s.productobase.id);
   });
 </script>

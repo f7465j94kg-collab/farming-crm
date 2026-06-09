@@ -1,10 +1,10 @@
 <script>
 (function () {
   var KEY = 'cfgState';
-  var STEPS = ['fabricante', 'producto', 'productobase', 'n1', 'n2', 'n3', 'n4', 'opcionales'];
+  var STEPS = ['fabricante', 'producto', 'productobase', 'n1', 'n2', 'n3', 'n4', 'opcionales', 'resumen'];
   var PAGE = {
     fabricante: '/cpq', producto: '/producto', productobase: '/producto-base',
-    n1: '/n1', n2: '/n2', n3: '/n3', n4: '/n4', opcionales: '/opcionales'
+    n1: '/n1', n2: '/n2', n3: '/n3', n4: '/n4', opcionales: '/opcionales', resumen: '/resumen'
   };
   // step -> { parentStep, queryParam } used to reach it
   var REACH = {
@@ -18,7 +18,7 @@
   };
   var LABEL = {
     fabricante: 'Fabricante', producto: 'Producto', productobase: 'Producto Base',
-    n1: 'N1', n2: 'N2', n3: 'N3', n4: 'N4', opcionales: 'Opcionales'
+    n1: 'N1', n2: 'N2', n3: 'N3', n4: 'N4', opcionales: 'Opcionales', resumen: 'Resumen'
   };
 
   function get() { try { return JSON.parse(sessionStorage.getItem(KEY)) || {}; } catch (e) { return {}; } }
@@ -50,7 +50,10 @@
 
   function urlFor(key) {
     if (key === 'fabricante') return PAGE.fabricante;
-    var s = get(), r = REACH[key];
+    var s = get();
+    // resumen reads everything from sessionStorage; reachable once a model is chosen
+    if (key === 'resumen') { return (s.productobase && s.productobase.id) ? PAGE.resumen : null; }
+    var r = REACH[key];
     if (!r || !s[r.parent] || !s[r.parent].id) return null;
     return PAGE[key] + '?' + r.param + '=' + s[r.parent].id;
   }
