@@ -18,9 +18,16 @@
         </div>
       </div>
 
+      <div class="rsm-comment">
+        <label class="rsm-comment-label" for="rsmComentario">¿Desea añadir algún comentario a su pedido?</label>
+        <textarea id="rsmComentario" class="rsm-comment-box" rows="5" maxlength="10000"
+                  placeholder="Escribe aquí cualquier comentario para tu pedido..."></textarea>
+      </div>
+
       <div class="rsm-actions">
         <button type="button" class="cfg-btn cfg-btn-ghost" onclick="history.back()">Atrás</button>
-        <button type="button" id="rsmCrear" class="rsm-cta" onclick="crearPedido()">Crear pedido</button>
+        <button type="button" id="rsmPresupuesto" class="rsm-cta rsm-cta-alt" onclick="crearPresupuesto()">Crear Presupuesto</button>
+        <button type="button" id="rsmCrear" class="rsm-cta" onclick="solicitarPedido()">Solicitar Pedido</button>
         <button type="button" id="rsmNuevo" class="cfg-btn cfg-btn-primary" style="display:none;" onclick="nuevoPedido()">Nuevo pedido</button>
       </div>
     </div>
@@ -42,15 +49,29 @@
   .rsm-total { display: flex; justify-content: space-between; align-items: center; padding: 1.3rem 1.6rem; background: #f6fbfe; border-top: 2px solid #1f2a44; }
   .rsm-total > span:first-child { font-size: 1.05rem; font-weight: 800; color: #1a2b4a; text-transform: uppercase; letter-spacing: 0.04em; }
   .rsm-total-amt { font-size: 1.9rem; font-weight: 800; color: #2aa9e0; }
-  .rsm-actions { display: flex; gap: 0.9rem; align-items: center; margin-top: 1.6rem; }
+
+  /* ---- comment box ---- */
+  .rsm-comment { margin-top: 1.5rem; }
+  .rsm-comment-label { display: block; font-size: 1.05rem; font-weight: 700; color: #1f2a44; margin-bottom: 0.55rem; }
+  .rsm-comment-box {
+    width: 100%; box-sizing: border-box; min-height: 120px; padding: 0.85rem 1rem;
+    border: 1px solid #d4d8e0; border-radius: 12px; font-family: inherit; font-size: 0.98rem;
+    color: #1f2a44; resize: vertical;
+  }
+  .rsm-comment-box:focus { outline: none; border-color: #2aa9e0; box-shadow: 0 0 0 3px rgba(42,169,224,0.15); }
+
+  /* ---- actions ---- */
+  .rsm-actions { display: flex; gap: 0.9rem; align-items: center; margin-top: 1.6rem; flex-wrap: wrap; }
   .rsm-cta {
     flex: 1 1 auto; display: inline-flex; align-items: center; justify-content: center; gap: 0.5rem;
     padding: 1rem 1.6rem; border: none; border-radius: 12px; background: #2aa9e0; color: #fff;
-    font-size: 1.15rem; font-weight: 800; cursor: pointer; box-shadow: 0 8px 24px rgba(42,169,224,0.4);
+    font-size: 1.1rem; font-weight: 800; cursor: pointer; box-shadow: 0 8px 24px rgba(42,169,224,0.4);
     transition: background 0.15s ease, transform 0.15s ease, opacity 0.15s ease;
   }
   .rsm-cta:hover:not(:disabled) { background: #1f93c7; transform: translateY(-2px); }
   .rsm-cta:disabled { opacity: 0.5; cursor: not-allowed; box-shadow: none; }
+  .rsm-cta-alt { background: #fff; color: #2aa9e0; border: 2px solid #2aa9e0; box-shadow: none; }
+  .rsm-cta-alt:hover:not(:disabled) { background: #f0faff; transform: translateY(-2px); }
   .rsm-empty { color: #9aa3b2; font-size: 1rem; padding: 2rem 1.6rem; text-align: center; }
 </style>
 
@@ -58,6 +79,10 @@
   var SET_OPP = 'wi_oportunidadfarmings';
   var SET_LINE = 'wi_productlineitemses';
   var SET_PBF = 'wi_productobasefarmings';
+
+  // Fase choice values (see option set): Presupuesto/Borrador = 1, Solicitud de pedido = 2
+  var FASE_PRESUPUESTO = 1;
+  var FASE_PEDIDO = 2;
 
   function esc(t) { var d = document.createElement('div'); d.textContent = (t == null ? '' : t); return d.innerHTML; }
 
@@ -67,6 +92,9 @@
     el.className = 'cfg-status ' + (kind || '');
     el.textContent = msg;
   }
+
+  function actionBtns() { return [document.getElementById('rsmCrear'), document.getElementById('rsmPresupuesto')]; }
+  function setBusy(b) { actionBtns().forEach(function (btn) { if (btn) btn.disabled = b; }); }
 
   function lineHtml(step, name, price) {
     var p = (price != null && Number(price) > 0) ? window.CFG.fmt(price) : '';
@@ -93,8 +121,8 @@
     }
     box.innerHTML = any ? html : '<div class="rsm-empty">Aún no has seleccionado nada. Vuelve al configurador.</div>';
     document.getElementById('rsmTotal').textContent = window.CFG.fmt(window.CFG.total());
-    // enable create only when a model is chosen
-    document.getElementById('rsmCrear').disabled = !(s.productobase && s.productobase.id);
+    // enable actions only when a model is chosen
+    setBusy(!(s.productobase && s.productobase.id));
   }
 
   function nuevoPedido() {
@@ -132,7 +160,8 @@
     });
   }
 
-  function crearPedido() {
+  // Shared creation logic. `fase` sets the wi_fase choice value on the opportunity.
+  function crear(fase) {
     var s = window.CFG.get();
     if (!s.productobase || !s.productobase.id) {
       showStatus('Falta seleccionar el modelo (Producto Base).', 'err');
@@ -140,11 +169,16 @@
     }
     if (!confirm('¿Crear la oportunidad y las líneas del pedido?')) return;
 
-    document.getElementById('rsmCrear').disabled = true;
+    setBusy(true);
     showStatus('Creando oportunidad...');
+    var comentario = (document.getElementById('rsmComentario').value || '').trim();
 
     getToken().then(function (token) {
-      var oppPayload = { 'wi_ProductoBaseF@odata.bind': '/' + SET_PBF + '(' + s.productobase.id + ')' };
+      var oppPayload = {
+        'wi_ProductoBaseF@odata.bind': '/' + SET_PBF + '(' + s.productobase.id + ')',
+        'wi_fase': fase
+      };
+      if (comentario) oppPayload.wi_comentarios = comentario;
       return apiCreate(SET_OPP, oppPayload, token).then(function (res) {
         var oppId = res.id || (res.data && res.data.wi_oportunidadfarmingid);
         if (!oppId) throw new Error('Oportunidad creada pero no se obtuvo su id.');
@@ -172,14 +206,18 @@
       });
     }).then(function (count) {
       showStatus('✅ Oportunidad y ' + count + ' líneas creadas correctamente.', 'ok');
-      // hide create to avoid double-submit; offer a fresh start
+      // hide both create buttons to avoid double-submit; offer a fresh start
       document.getElementById('rsmCrear').style.display = 'none';
+      document.getElementById('rsmPresupuesto').style.display = 'none';
       document.getElementById('rsmNuevo').style.display = 'inline-flex';
     }).catch(function (err) {
       showStatus('❌ ' + err.message, 'err');
-      document.getElementById('rsmCrear').disabled = false;
+      setBusy(false);
     });
   }
+
+  function solicitarPedido() { crear(FASE_PEDIDO); }       // Fase = Solicitud de pedido (2)
+  function crearPresupuesto() { crear(FASE_PRESUPUESTO); } // Fase = Presupuesto / Borrador (1)
 
   document.addEventListener('cfg:changed', render);
   document.addEventListener('DOMContentLoaded', render);
