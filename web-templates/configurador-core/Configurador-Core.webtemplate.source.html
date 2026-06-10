@@ -122,11 +122,12 @@
     text-decoration: none; cursor: pointer;
   }
   .cfg-card:hover { transform: translateY(-4px); box-shadow: 0 10px 26px rgba(0,0,0,0.14); text-decoration: none; }
+  .cfg-card, .cfg-card:hover, .cfg-card:focus, .cfg-card * { text-decoration: none !important; }
   .cfg-card-img { height: 150px; background: #eef2fb center/cover no-repeat; display: flex; align-items: center; justify-content: center; }
   .cfg-card-img img { max-width: 80%; max-height: 80%; object-fit: contain; }
   .cfg-card-body { padding: 0.9rem 1.1rem 1.1rem; }
-  .cfg-card-title { font-size: 1.05rem; font-weight: 700; color: #1a2b4a; margin: 0 0 0.35rem; }
-  .cfg-card-desc { font-size: 0.85rem; color: #6b7280; line-height: 1.4; margin: 0 0 0.9rem;
+  .cfg-card-title { font-size: 1.05rem; font-weight: 700; color: #1a2b4a; margin: 0 0 0.6rem; }
+  .cfg-card-desc { font-size: 0.85rem; color: #6b7280; line-height: 1.4; margin: 0 0 1.1rem;
                    display: -webkit-box; -webkit-line-clamp: 4; -webkit-box-orient: vertical; overflow: hidden; }
 
   /* ---- option list (radios / checkboxes) ---- */
