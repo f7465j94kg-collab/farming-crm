@@ -38,7 +38,8 @@
 {% include 'Configurador Core' %}
 
 <style>
-  .pb-detail { background:#fff; border:1px solid #eceef1; border-radius:14px; box-shadow:0 2px 14px rgba(0,0,0,0.05); padding:1.4rem 1.6rem; margin-bottom:1.75rem; }
+  .pb-detail { background:#fff; border:1px solid #eceef1; border-radius:14px; box-shadow:0 2px 14px rgba(0,0,0,0.05); padding:1.4rem 1.6rem; }
+  .pb-modelos { margin-top:1.5rem; }
   .pb-detail-title { font-size:1.4rem; font-weight:700; color:#1a2b4a; margin:0 0 1.1rem; }
   .pb-detail-row { display:flex; gap:1.6rem; align-items:flex-start; }
   .pb-detail-img { flex:0 0 320px; max-width:320px; border:1px solid #e0e3e9; border-radius:10px; overflow:hidden; background:#fff; }
@@ -56,52 +57,56 @@
 <div id="mainContent" class="wrapper-body" role="main">
   <div class="cfg-wrap">
     {% include 'Configurador Stepper' current: 'productobase' %}
-    {% if prod %}
-    <div class="pb-detail">
-      <h3 class="pb-detail-title">{{ prod.wi_nombreproducto | escape }}</h3>
-      <div class="pb-detail-row">
-        <div class="pb-detail-img">
-          <img src="https://farmingpalencia.sharepoint.com/sites/CRMLibrary/CRM_DEV/Fabricantes/{{ prod.wi_fabricante.name | replace: ' ', '%20' }}/{{ prod.wi_nombreproducto | replace: ' ', '%20' }}/{{ prod.wi_nombreproducto | replace: ' ', '%20' }}.png"
-               alt="{{ prod.wi_nombreproducto | escape }}"
-               onerror="this.style.display='none';this.nextElementSibling.style.display='block';" />
-          <span style="display:none;font-size:2rem;color:#9aa3b2;text-align:center;padding:2rem 0;" aria-hidden="true">&#9881;</span>
-        </div>
-        <div class="pb-detail-text">
-          <div class="pb-detail-desc">{{ prod.wi_descripcion | escape }}</div>
-          <h4 class="pb-detail-carac-title">Características</h4>
-          <div class="pb-detail-carac">{{ prod.wi_caracteristicastecnicas }}</div>
-        </div>
-      </div>
-    </div>
-    {% endif %}
+
     <div class="cfg-layout">
       <main class="cfg-main">
-        <h2 class="cfg-h2">Selecciona el modelo</h2>
-        {% if modelos.results.entities.size > 0 %}
-        <div class="cfg-panel">
-          <div class="cfg-panel-head">Modelo</div>
-          <div id="cfgList">
-            {% for m in modelos.results.entities %}
-            <label class="cfg-opt">
-              <input type="radio" name="cfgsel" value="{{ m.wi_productobasefarmingid }}"
-                     data-label="{{ m.wi_nombreproducto | escape }}" data-price="{{ m.wi_pvp }}"
-                     onclick="cfgSelect(this)" />
-              <span class="cfg-opt-name">{{ m.wi_nombreproducto | escape }}</span>
-              <span class="cfg-opt-dots"></span>
-              <span class="cfg-opt-price"></span>
-            </label>
-            {% endfor %}
+        {% if prod %}
+        <div class="pb-detail">
+          <h3 class="pb-detail-title">{{ prod.wi_nombreproducto | escape }}</h3>
+          <div class="pb-detail-row">
+            <div class="pb-detail-img">
+              <img src="https://farmingpalencia.sharepoint.com/sites/CRMLibrary/CRM_DEV/Fabricantes/{{ prod.wi_fabricante.name | replace: ' ', '%20' }}/{{ prod.wi_nombreproducto | replace: ' ', '%20' }}/{{ prod.wi_nombreproducto | replace: ' ', '%20' }}.png"
+                   alt="{{ prod.wi_nombreproducto | escape }}"
+                   onerror="this.style.display='none';this.nextElementSibling.style.display='block';" />
+              <span style="display:none;font-size:2rem;color:#9aa3b2;text-align:center;padding:2rem 0;" aria-hidden="true">&#9881;</span>
+            </div>
+            <div class="pb-detail-text">
+              <div class="pb-detail-desc">{{ prod.wi_descripcion | escape }}</div>
+              <h4 class="pb-detail-carac-title">Características</h4>
+              <div class="pb-detail-carac">{{ prod.wi_caracteristicastecnicas }}</div>
+            </div>
           </div>
         </div>
-        <div class="cfg-nav">
-          <button type="button" class="cfg-btn cfg-btn-ghost" onclick="history.back()">Atrás</button>
-          <button type="button" id="cfgNext" class="cfg-btn cfg-btn-primary" disabled onclick="cfgGoNext()">Siguiente</button>
-        </div>
-        {% else %}
-        <p class="cfg-sum-empty">No hay modelos para este producto.</p>
         {% endif %}
       </main>
       <aside class="cfg-side">{% include 'Resumen Pedido' %}</aside>
+    </div>
+
+    <div class="pb-modelos">
+      <h2 class="cfg-h2">Selecciona modelo y configura la máquina</h2>
+      {% if modelos.results.entities.size > 0 %}
+      <div class="cfg-panel">
+        <div class="cfg-panel-head">Modelo</div>
+        <div id="cfgList">
+          {% for m in modelos.results.entities %}
+          <label class="cfg-opt">
+            <input type="radio" name="cfgsel" value="{{ m.wi_productobasefarmingid }}"
+                   data-label="{{ m.wi_nombreproducto | escape }}" data-price="{{ m.wi_pvp }}"
+                   onclick="cfgSelect(this)" />
+            <span class="cfg-opt-name">{{ m.wi_nombreproducto | escape }}</span>
+            <span class="cfg-opt-dots"></span>
+            <span class="cfg-opt-price"></span>
+          </label>
+          {% endfor %}
+        </div>
+      </div>
+      <div class="cfg-nav">
+        <button type="button" class="cfg-btn cfg-btn-ghost" onclick="history.back()">Atrás</button>
+        <button type="button" id="cfgNext" class="cfg-btn cfg-btn-primary" disabled onclick="cfgGoNext()">Siguiente</button>
+      </div>
+      {% else %}
+      <p class="cfg-sum-empty">No hay modelos para este producto.</p>
+      {% endif %}
     </div>
   </div>
 </div>
