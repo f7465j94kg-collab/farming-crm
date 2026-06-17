@@ -65,3 +65,18 @@ legend {
   font-family: 'Space Grotesk', 'Segoe UI', Arial, sans-serif !important;
   font-size: 0.95rem;
 }
+
+/* ----- Submit buttons ("Next" / "Actualizar") -----
+   After hiding the marketing panel, the two form submit buttons collapsed
+   together and overlapped. Give each form and each button clear spacing so
+   they no longer touch. (This CSS is injected only on the Perfil page.) */
+#content_container form,
+.crmEntityFormView {
+  margin-bottom: 1.75rem;
+}
+.btn-primary,
+button[type="submit"],
+input[type="submit"] {
+  margin: 0.85rem 0.75rem 0.85rem 0 !important;
+  vertical-align: top;
+}
