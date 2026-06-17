@@ -1,91 +1,152 @@
-<div class="row sectionBlockLayout" data-component-theme="portalThemeColor1" style="display: flex; flex-wrap: wrap; text-align: left; min-height: auto;">
-    <div class="container" style="padding: 0px; display: flex; flex-wrap: wrap; flex-direction: row-reverse;">
-        <div class="col-lg-6 columnBlockLayout" style="flex-grow: 1; display: flex; flex-direction: column; min-width: 300px;"><img src="/Geometric-4.png" alt="" name="Geometric-4.png" style="width: 117%; height: 305.545px; max-width: 100%;"></div>
-        <div class="col-lg-6 columnBlockLayout" style="flex-grow: 1; display: flex; flex-direction: column; min-width: 300px;">
-            <h2>Create an engaging headline, welcome, or call to action</h2>
-            <button onclick="window.location.href='/'" type="button" value="/" class="button1">Add a call to action here</button>
-        </div>
+<style>
+  /* ===== Home (Inicio) redesign ===== */
+  .home-wrap { font-family: 'Space Grotesk', 'Segoe UI', Arial, sans-serif; max-width: 1180px; margin: 0 auto; padding: 0 1rem 3.5rem; }
+
+  /* Hero band */
+  .home-hero {
+    position: relative;
+    border-radius: 16px;
+    overflow: hidden;
+    min-height: 420px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    text-align: center;
+    margin: 1.75rem 0 2rem;
+    background-image: url('https://farmingpalencia.sharepoint.com/sites/CRMLibrary/CRM_DEV/Tools/atardecer-farming-agricola.jpg');
+    background-size: cover;
+    background-position: center 60%;
+  }
+  /* Subtle dark overlay only for title legibility */
+  .home-hero::before {
+    content: "";
+    position: absolute;
+    inset: 0;
+    background: linear-gradient(180deg, rgba(0,0,0,0.10) 0%, rgba(0,0,0,0.28) 100%);
+  }
+  .home-hero-title {
+    position: relative;
+    z-index: 1;
+    color: #ffffff;
+    font-family: 'Space Grotesk', 'Segoe UI', Arial, sans-serif;
+    font-weight: 700;
+    font-size: clamp(2.2rem, 5vw, 3.6rem);
+    line-height: 1.1;
+    margin: 0;
+    padding: 1rem;
+    text-shadow: 0 2px 14px rgba(0,0,0,0.45);
+  }
+
+  /* Intro line */
+  .home-intro {
+    text-align: center;
+    color: #1f2a44;
+    font-size: clamp(1.05rem, 2.2vw, 1.35rem);
+    line-height: 1.5;
+    max-width: 820px;
+    margin: 0 auto 2.75rem;
+  }
+
+  /* Cards */
+  .home-cards { display: flex; flex-direction: column; gap: 1.75rem; }
+  .home-card {
+    display: flex;
+    align-items: stretch;
+    background: #ffffff;
+    border-radius: 16px;
+    box-shadow: 0 6px 24px rgba(31,42,68,0.10);
+    overflow: hidden;
+  }
+  .home-card-img {
+    flex: 0 0 38%;
+    max-width: 38%;
+    object-fit: cover;
+    min-height: 230px;
+  }
+  .home-card-body {
+    flex: 1 1 auto;
+    padding: 2rem 2.25rem;
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+  }
+  .home-card-body h2 {
+    font-family: 'Space Grotesk', 'Segoe UI', Arial, sans-serif;
+    font-weight: 700;
+    color: #1f2a44;
+    font-size: 1.6rem;
+    margin: 0 0 0.65rem;
+  }
+  .home-card-body p {
+    color: #45506a;
+    font-size: 1rem;
+    line-height: 1.55;
+    margin: 0 0 1.4rem;
+  }
+  .home-card-btn {
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    align-self: flex-start;
+    background: #009FD9;
+    color: #ffffff !important;
+    border: 1px solid #009FD9;
+    border-radius: 10px;
+    font-weight: 700;
+    font-size: 1rem;
+    padding: 0.65rem 1.6rem;
+    text-decoration: none !important;
+    transition: background-color 0.15s ease, border-color 0.15s ease;
+    font-family: 'Space Grotesk', 'Segoe UI', Arial, sans-serif;
+  }
+  .home-card-btn:hover, .home-card-btn:focus {
+    background: #0080B5;
+    border-color: #0080B5;
+    color: #ffffff !important;
+    text-decoration: none !important;
+  }
+
+  @media (max-width: 768px) {
+    .home-card { flex-direction: column; }
+    .home-card-img { flex-basis: auto; max-width: 100%; width: 100%; height: 200px; }
+  }
+</style>
+
+<div class="home-wrap">
+  <div class="home-hero">
+    <h1 class="home-hero-title">El portal de Farming</h1>
+  </div>
+
+  <p class="home-intro">El portal de Farming es el sitio donde podrás configurar tus pedidos, hacer el seguimiento y gestionarlos.</p>
+
+  <div class="home-cards">
+
+    <div class="home-card">
+      <img class="home-card-img" src="https://farmingpalencia.sharepoint.com/sites/CRMLibrary/CRM_DEV/Tools/atardecer-farming-agricola.jpg" alt="Mis oportunidades">
+      <div class="home-card-body">
+        <h2>Mis oportunidades</h2>
+        <p>Lorem ipsum dolor sit amet, consectetur adipiscing elit. Consulta el estado de tus oportunidades comerciales y avanza en su gestión desde un único lugar. Sed do eiusmod tempor incididunt ut labore.</p>
+        <a class="home-card-btn" href="/Oportunidades">Ver oportunidades</a>
+      </div>
     </div>
-</div>
-<div class="row sectionBlockLayout" data-component-theme="portalThemeColor3" style="display: flex; flex-wrap: wrap; min-height: 28px;"></div>
-<div class="row sectionBlockLayout" style="display: flex; flex-wrap: wrap; text-align: left; min-height: auto;">
-    <div class="container" style="padding: 0px; display: flex; flex-wrap: wrap;">
-        <div class="col-lg-12 columnBlockLayout" style="flex-grow: 1; display: flex; flex-direction: column; min-width: 300px;">
-            <h2 style="text-align: center;">Introduction section</h2>
-            <p style="text-align: center;">Create a short paragraph that shows your target audience a clear benefit to them if they continue past this point and offer direction about the next steps</p>
-        </div>
+
+    <div class="home-card">
+      <img class="home-card-img" src="https://farmingpalencia.sharepoint.com/sites/CRMLibrary/CRM_DEV/Tools/atardecer-farming-agricola.jpg" alt="Peticiones a producto">
+      <div class="home-card-body">
+        <h2>Peticiones a producto</h2>
+        <p>Lorem ipsum dolor sit amet, consectetur adipiscing elit. Crea y revisa tus peticiones a producto y mantén el seguimiento de cada solicitud. Ut enim ad minim veniam, quis nostrud exercitation.</p>
+        <a class="home-card-btn" href="/Contacto">Ver peticiones</a>
+      </div>
     </div>
-</div>
-<div class="row sectionBlockLayout" style="display: flex; flex-wrap: wrap; text-align: left; min-height: auto;">
-    <div class="container" style="padding: 0px; display: flex; flex-wrap: wrap;">
-        <div class="col-lg-4 columnBlockLayout" style="flex-grow: 1; display: flex; flex-direction: column; min-width: 300px;"><img src="/Circle-1.png" alt="" name="Circle-1.png" style="width: 108px; height: 108px; max-width: 100%; margin-left: auto; margin-right: auto;">
-            <h3 style="text-align: center;">Featured Item 1</h3>
-            <p style="text-align: center;">Create a short description or engaging message to motivate your audience to find out more about this item.</p>
-        </div>
-        <div class="col-lg-4 columnBlockLayout" style="flex-grow: 1; display: flex; flex-direction: column; min-width: 300px;"><img src="/Circle-2.png" alt="" name="Circle-2.png" style="width: 108px; height: 108px; max-width: 100%; margin-left: auto; margin-right: auto;">
-            <h3 style="text-align: center;">Featured Item 2</h3>
-            <p style="text-align: center;">Create a short description or engaging message to motivate your audience to find out more about this item.</p>
-        </div>
-        <div class="col-lg-4 columnBlockLayout" style="flex-grow: 1; display: flex; flex-direction: column; min-width: 300px;"><img src="/Circle-3.png" alt="" name="Circle-3.png" style="width: 108px; height: 108px; max-width: 100%; margin-left: auto; margin-right: auto;">
-            <h3 style="text-align: center;">Featured Item 3</h3>
-            <p style="text-align: center;">Create a short description or engaging message to motivate your audience to find out more about this item.</p>
-        </div>
+
+    <div class="home-card">
+      <img class="home-card-img" src="https://farmingpalencia.sharepoint.com/sites/CRMLibrary/CRM_DEV/Tools/atardecer-farming-agricola.jpg" alt="Productos en stock">
+      <div class="home-card-body">
+        <h2>Productos en Stock</h2>
+        <p>Lorem ipsum dolor sit amet, consectetur adipiscing elit. Explora los productos disponibles en stock y consulta su disponibilidad actualizada. Duis aute irure dolor in reprehenderit in voluptate.</p>
+        <a class="home-card-btn" href="/productos-en-stock">Ver productos</a>
+      </div>
     </div>
-</div>
-<div class="row sectionBlockLayout" data-component-theme="portalThemeColor6" style="display: flex; flex-wrap: wrap; min-height: 52px;"></div>
-<div class="row sectionBlockLayout" data-component-theme="portalThemeColor5" style="display: flex; flex-wrap: wrap; height: 15px; min-height: 52px;">
-</div>
-<div class="row sectionBlockLayout" data-component-theme="portalThemeColor3" style="display: flex; flex-wrap: wrap; text-align: left; min-height: auto;">
-    <div class="container" style="padding: 0px; display: flex; flex-wrap: wrap; flex-direction: row;">
-        <div class="col-lg-6 columnBlockLayout" style="flex-grow: 1; display: flex; flex-direction: column; min-width: 300px;">
-            <h2>Showcase a video</h2>
-            <p>Videos are optional, but are often used to summarize the benefits of a product or service. Describe the video content and give viewers a clear reason to click. </p>
-            <button onclick="window.location.href='/'" type="button" value="/" class="button1">Add a call to action here</button>
-        </div>
-        <div class="col-lg-6 columnBlockLayout" style="flex-grow: 1; display: flex; flex-direction: column; min-width: 300px;"><video allowfullscreen="allowfullscreen" src="/Video1.mp4" controls="controls" autoplay="" muted="" style="max-width: 100%;"> </video></div>
-    </div>
-</div>
-<div class="row sectionBlockLayout" data-component-theme="portalThemeColor1" style="display: flex; flex-wrap: wrap; min-height: 52px;"></div>
-<div class="row sectionBlockLayout" style="display: flex; flex-wrap: wrap; text-align: left; min-height: auto;">
-    <div class="container" style="padding: 0px; display: flex; flex-wrap: wrap;">
-        <div class="col-lg-6 columnBlockLayout" style="flex-grow: 1; display: flex; flex-direction: column; min-width: 300px;"><img src="/Graph-1.png" alt="" name="Graph-1.png" style="width: 100%; height: auto; max-width: 100%;"></div>
-        <div class="col-lg-6 columnBlockLayout" style="flex-grow: 1; display: flex; flex-direction: column; min-width: 300px;">
-            <h2>Product or service one</h2>
-            <p>Highlight specific benefits of a product or service and invite your site visitors to learn more about how it works and why your organization is the right one to meet their unique needs.</p>
-        </div>
-    </div>
-</div>
-<div class="row sectionBlockLayout" style="display: flex; flex-wrap: wrap; text-align: left; min-height: auto;">
-    <div class="container" style="padding: 0px; display: flex; flex-wrap: wrap;  flex-direction: row-reverse;">
-        <div class="col-lg-6 columnBlockLayout" style="flex-grow: 1; display: flex; flex-direction: column; min-width: 300px;"><img src="/Site-mockup-1.png" alt="" name="Site-mockup-1.png" style="width: 100%; height: auto; max-width: 100%;"></div>
-        <div class="col-lg-6 columnBlockLayout" style="flex-grow: 1; display: flex; flex-direction: column; min-width: 300px;">
-            <h2>Product or service two</h2>
-            <p>Highlight specific benefits of a product or service and invite your site visitors to learn more about how it works and why your organization is the right one to meet their unique needs.</p>
-            <div><br></div>
-            <p></p>
-        </div>
-    </div>
-</div>
-<div class="row sectionBlockLayout" data-component-theme="portalThemeColor3" style="display: flex; flex-wrap: wrap; text-align: left; min-height: auto;">
-    <div class="container" style="padding: 0px; display: flex; flex-wrap: wrap;">
-        <div class="col-lg-6 columnBlockLayout" style="flex-grow: 1; display: flex; flex-direction: column; min-width: 300px;"><img src="/Geometric-2.png" alt="" name="Geometric-2.png" style="width: 102.56%; height: 343px; max-width: 100%;"></div>
-        <div class="col-lg-6 columnBlockLayout" style="flex-grow: 1; display: flex; flex-direction: column; min-width: 300px;">
-            <h2>Share a story</h2>
-            <p>Main pages often include links to stories about how individual people or organizations benefit from interacting with your organization.</p>
-            <button onclick="window.location.href='/'" type="button" value="/" class="button1">Add a call to action here</button>
-        </div>
-    </div>
-</div>
-<div class="row sectionBlockLayout" data-component-theme="portalThemeColor2" style="display: flex; flex-wrap: wrap; min-height: 52px;"></div>
-<div class="row sectionBlockLayout" data-component-theme="portalThemeColor5" style="display: flex; flex-wrap: wrap; min-height: 52px;"></div>
-<div class="row sectionBlockLayout" data-component-theme="portalThemeColor1" style="display: flex; flex-wrap: wrap; text-align: left; min-height: auto;">
-    <div class="container" style="padding: 0px; display: flex; flex-wrap: wrap;">
-        <div class="col-lg-12 columnBlockLayout" style="flex-grow: 1; display: flex; flex-direction: column; min-width: 300px;">
-            <div class="row sectionBlockLayout" style="display: flex; flex-wrap: wrap; min-height: 120px;"></div>
-            <h2>Introduce another idea</h2>
-            <p>This section can be used to offer supporting information or introduce a new idea. It’s best to keep it relevant to the contents of the page so it doesn’t feel out of place. Common topics include a summary of your organization’s mission, people,
-                or an upcoming event with links to provide more information. </p>
-            <div class="row sectionBlockLayout" style="display: flex; flex-wrap: wrap; min-height: 120px;"></div>
-        </div>
-    </div>
+
+  </div>
 </div>
