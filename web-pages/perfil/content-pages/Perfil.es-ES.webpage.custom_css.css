@@ -1,27 +1,10 @@
 /* ===== Perfil (profile) page — page-scoped spacing =====
-   This Custom CSS field is injected only on the Perfil page, so these rules
-   do NOT affect entity forms elsewhere on the site. */
+   Injected only on the Perfil page, so this does not affect forms elsewhere.
+   Sole purpose: add breathing room below the "Actualizar" submit button so it
+   is not flush against the footer. No top margins (those previously clipped /
+   hid profile fields) and nothing that alters the spacing between the form's
+   "Next" button and the question below it. */
 
-/* (b) Top breathing room where the profile form / question section begins
-   (the section heading + any preceding icon get space from what's above). */
-.crmEntityFormView {
-  margin-top: 2.5rem;
-}
-.crmEntityFormView .tab:first-child,
-.crmEntityFormView .section:first-child,
-.crmEntityFormView fieldset:first-of-type {
-  margin-top: 1.25rem;
-}
-
-/* (a) Bottom gap below the submit button ("Actualizar") so the form is not
-   jammed flush against the footer. */
-.crmEntityFormView .actions,
-.crmEntityFormView #submitButton,
-.crmEntityFormView .submit-btn,
-.crmEntityFormView input[type="submit"],
-.entity-form .actions {
-  margin-bottom: 3rem;
-}
-.crmEntityFormView {
+.crmEntityFormView .actions {
   margin-bottom: 3rem;
 }

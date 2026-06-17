@@ -2,7 +2,18 @@
   /* ===== Home (Inicio) redesign ===== */
   .home-wrap { font-family: 'Space Grotesk', 'Segoe UI', Arial, sans-serif; max-width: 1180px; margin: 0 auto; padding: 0 1rem 3.5rem; }
 
-  /* Hero band — full-bleed: breaks out of .home-wrap to the full viewport width */
+  /* Clip any horizontal overshoot from the hero's full-bleed breakout so the
+     page never shows a horizontal scrollbar. The footer/header are plain
+     body-level blocks (body width = viewport minus scrollbar); clipping the
+     wrapper at overflow-x:hidden makes the hero's visible edges stop exactly at
+     the body edge, lining up with the footer band. */
+  html, body { overflow-x: hidden; }
+  .wrapper-body { overflow-x: hidden; }
+
+  /* Hero band — full-bleed band that fills the body width (matches footer).
+     The 100vw breakout itself includes the scrollbar, but the overflow-x:hidden
+     guards above clip that scrollbar-width overshoot, so there is no horizontal
+     scrollbar and the right edge aligns with the footer. */
   .home-hero {
     position: relative;
     width: 100vw;
