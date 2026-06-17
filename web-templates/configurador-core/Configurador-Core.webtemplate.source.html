@@ -91,9 +91,12 @@
     white-space: nowrap;
   }
   a.cfg-step { color: #3b4252; cursor: pointer; }
-  a.cfg-step:hover { color: #3b4252; font-weight: 800; text-decoration: none; }
+  /* Keep a single constant font-weight in every state so the row never
+     reflows; use a subtle text-shadow for emphasis instead (same trick as
+     the site header nav). */
+  a.cfg-step:hover { color: #3b4252; text-shadow: 0.3px 0 0 currentColor, -0.3px 0 0 currentColor; text-decoration: none; }
   .cfg-step, a.cfg-step, a.cfg-step:hover, a.cfg-step:focus { text-decoration: none !important; }
-  .cfg-step.is-current { color: #1f2a44; }
+  .cfg-step.is-current { color: #1f2a44; text-shadow: 0.3px 0 0 currentColor, -0.3px 0 0 currentColor; }
   .cfg-step.is-current::after {
     content: '';
     position: absolute;

@@ -803,6 +803,26 @@ button, input, select, textarea, optgroup,
   font-family: 'Space Grotesk', 'Segoe UI', Arial, sans-serif !important;
 }
 
+/* Broaden coverage to breadcrumbs and the Perfil / entity-form areas, which
+   set their own font. Target text-bearing descendants but NEVER icon classes
+   (glyphicon / font-awesome) or their glyphs would render as plain letters. */
+.breadcrumb, .breadcrumb a, .breadcrumb li, .breadcrumb-item, .breadcrumb-item a,
+.crmEntityFormView, .crmEntityFormView *,
+.entity-form, .entity-form *,
+.profile, .profile *,
+.page-heading, .page-heading * {
+  font-family: 'Space Grotesk', 'Segoe UI', Arial, sans-serif !important;
+}
+/* Restore the icon fonts for any glyph caught by the wildcards above, so the
+   broad Space Grotesk rule never turns a glyph into a plain letter. */
+.glyphicon, [class*="glyphicon"] {
+  font-family: 'Glyphicons Halflings' !important;
+}
+.fa, .fas, .far, .fal, .fab, .fa-solid, .fa-regular, .fa-light, .fa-brands,
+[class^="fa-"], [class*=" fa-"] {
+  font-family: 'Font Awesome 6 Free', 'Font Awesome 5 Free', 'FontAwesome', 'Font Awesome 6 Brands', 'Font Awesome 5 Brands' !important;
+}
+
 /* ===== Standard button style (matches the Configurador buttons): rounded + Space Grotesk ===== */
 .btn-primary, .btn-default, .btn-secondary, .button1, .button2 {
   border-radius: 10px !important;
