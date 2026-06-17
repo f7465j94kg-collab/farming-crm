@@ -112,7 +112,7 @@ legend {
 
 footer {
   color: #FFFFFF;
-  font-family: Arial;
+  font-family: 'Space Grotesk', 'Segoe UI', Arial, sans-serif !important;
   font-weight: 400;
   font-size: 16px; }
   footer .footer-bottom {
@@ -171,7 +171,7 @@ footer {
   background-color: #009FD9;
   border-color: #009FD9;
   border-radius: 2px;
-  font-family: Arial;
+  font-family: 'Space Grotesk', 'Segoe UI', Arial, sans-serif !important;
   font-weight: 600;
   font-size: 14px;
   padding: 6px 20px;
@@ -203,7 +203,7 @@ footer {
   background-color: #009FD9; }
 
 .static-top.navbar .menu-bar > .navbar-nav > li > a {
-  font-family: Arial;
+  font-family: 'Space Grotesk', 'Segoe UI', Arial, sans-serif !important;
   font-weight: 400;
   font-size: 20px;
   border: 1px solid transparent; }
@@ -223,7 +223,7 @@ footer {
 
 .navbar-dark .navbar-nav > li > a, .navbar-dark .navbar-nav > li.dropdown > a {
   color: #FFFFFF;
-  font-family: Arial;
+  font-family: 'Space Grotesk', 'Segoe UI', Arial, sans-serif !important;
   font-weight: 400;
   font-size: 20px; }
   .navbar-dark .navbar-nav > li > a:hover, .navbar-dark .navbar-nav > li.dropdown > a:hover {
@@ -353,7 +353,7 @@ a:not(.btn) {
 a,
 .a {
   color: #2A2C2E;
-  font-family: Arial;
+  font-family: 'Space Grotesk', 'Segoe UI', Arial, sans-serif !important;
   font-weight: 400;
   font-size: 14px; }
   a:hover, a:focus,
@@ -393,7 +393,7 @@ button[disabled] {
 .crmEntityFormView, .entitylist, .modal-content, .popover-content {
   background-color: #FFFFFF;
   color: #000000;
-  border: 1px solid #f2f2f2; }
+  border: 0px solid #f2f2f2; }
 
 .card-body, .list-group-item {
   background-color: #FFFFFF;
@@ -528,7 +528,7 @@ h1,
 .page_section h1,
 .color-inverse h1,
 h1 p {
-  font-family: Arial;
+  font-family: 'Space Grotesk', 'Segoe UI', Arial, sans-serif !important;
   font-weight: 400;
   font-size: 40px;
   color: #2A2C2E;
@@ -541,7 +541,7 @@ h2,
 .page_section h2,
 .color-inverse h2,
 h2 p {
-  font-family: Arial;
+  font-family: 'Space Grotesk', 'Segoe UI', Arial, sans-serif !important;
   font-weight: 400;
   font-size: 36px;
   color: #2A2C2E; }
@@ -551,7 +551,7 @@ h3,
 .page_section h3,
 .color-inverse h3,
 .sidebar-home h3 {
-  font-family: Arial;
+  font-family: 'Space Grotesk', 'Segoe UI', Arial, sans-serif !important;
   font-weight: 400;
   font-size: 24px;
   color: #2A2C2E; }
@@ -560,14 +560,14 @@ h4,
 .h4,
 .poll .poll-header h4,
 .poll .poll-tags h4 {
-  font-family: Arial;
+  font-family: 'Space Grotesk', 'Segoe UI', Arial, sans-serif !important;
   font-weight: 700;
   font-size: 24px;
   color: #2A2C2E; }
 
 h5,
 .h5 {
-  font-family: Arial;
+  font-family: 'Space Grotesk', 'Segoe UI', Arial, sans-serif !important;
   font-weight: 700;
   font-size: 14px;
   color: #2A2C2E; }
@@ -578,13 +578,13 @@ p,
 .section-diagonal-left p,
 .section-diagonal-right p,
 p.form-text span {
-  font-family: Arial;
+  font-family: 'Space Grotesk', 'Segoe UI', Arial, sans-serif !important;
   font-weight: 400;
   font-size: 20px;
   color: #2A2C2E; }
 
 .p2 {
-  font-family: Arial;
+  font-family: 'Space Grotesk', 'Segoe UI', Arial, sans-serif !important;
   font-weight: 400;
   font-size: 16px;
   color: #2A2C2E; }
@@ -592,7 +592,7 @@ p.form-text span {
 .button1 {
   color: #2A2C2E;
   border-radius: 2px;
-  font-family: Arial;
+  font-family: 'Space Grotesk', 'Segoe UI', Arial, sans-serif !important;
   font-weight: 600;
   font-size: 14px;
   border-color: #009FD9;
@@ -620,7 +620,7 @@ p.form-text span {
 .button2, .btn-secondary, .btn-default {
   color: #009FD9;
   border-radius: 2px;
-  font-family: Arial;
+  font-family: 'Space Grotesk', 'Segoe UI', Arial, sans-serif !important;
   font-weight: 600;
   font-size: 14px;
   border-color: #009FD9;
@@ -662,7 +662,7 @@ h1.siteTitle,
   display: inline;
   vertical-align: middle;
   color: #FFFFFF;
-  font-family: Arial;
+  font-family: 'Space Grotesk', 'Segoe UI', Arial, sans-serif !important;
   font-weight: 400;
   font-size: 30px; }
 
@@ -670,7 +670,7 @@ p.smallText {
   display: inline;
   vertical-align: middle;
   color: #2A2C2E;
-  font-family: Arial;
+  font-family: 'Space Grotesk', 'Segoe UI', Arial, sans-serif !important;
   font-weight: 400;
   font-size: 16px; }
 
@@ -776,7 +776,7 @@ h4, .h4, h5, .h5, h6, .h6 {
 
 a.nav-link[role="tab"]:not(.active) {
   color: #2A2C2E;
-  font-family: Arial;
+  font-family: 'Space Grotesk', 'Segoe UI', Arial, sans-serif !important;
   font-weight: 400;
   font-size: 14px; }
 
@@ -786,7 +786,8 @@ a.active.nav-link[role="tab"] {
 
 .crmEntityFormView label {
   background-color: #FFFFFF;
-  color: #000000; }
+  color: #000000;
+  padding-bottom: 10px; }
 
 /* till here */
 
