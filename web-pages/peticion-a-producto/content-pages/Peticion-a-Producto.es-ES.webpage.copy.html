@@ -19,10 +19,19 @@
   .pp-title { font-size: 2.4rem; font-weight: 700; color: #15233b; margin: 0; letter-spacing: -0.01em; }
   .pp-controls { display: flex; flex-wrap: wrap; align-items: center; gap: 0.75rem; }
 
+  /* Custom dropdown that matches the "Gestión Comercial" header menu: white
+     rounded panel, soft shadow, translucent brand-blue hover. Trigger keeps the
+     same height/size as the old native select. */
   .pp-filter { position: relative; }
-  .pp-filter select { -webkit-appearance: none; -moz-appearance: none; appearance: none; min-width: 200px; padding: 0.62rem 2.4rem 0.62rem 1rem; border: 1px solid #d4d8e0; border-radius: 10px; background: #fff; color: #45506a; font-size: 0.95rem; cursor: pointer; }
-  .pp-filter::after { content: ''; position: absolute; right: 1rem; top: 50%; width: 9px; height: 9px; border-right: 2px solid #8a93a6; border-bottom: 2px solid #8a93a6; transform: translateY(-65%) rotate(45deg); pointer-events: none; }
-  .pp-filter select:focus { outline: none; border-color: #009FD9; box-shadow: 0 0 0 3px rgba(0,159,217,0.15); }
+  .pp-filter-trigger { -webkit-appearance: none; -moz-appearance: none; appearance: none; display: inline-flex; align-items: center; box-sizing: border-box; min-width: 200px; padding: 0.62rem 2.4rem 0.62rem 1rem; border: 1px solid #d4d8e0; border-radius: 10px; background: #fff; color: #45506a; font-size: 0.95rem; line-height: 1.2; cursor: pointer; font-family: inherit; text-align: left; width: 100%; }
+  .pp-filter::after { content: ''; position: absolute; right: 1rem; top: 50%; width: 9px; height: 9px; border-right: 2px solid #8a93a6; border-bottom: 2px solid #8a93a6; transform: translateY(-65%) rotate(45deg); pointer-events: none; transition: transform 0.15s ease; }
+  .pp-filter.open::after { transform: translateY(-35%) rotate(-135deg); }
+  .pp-filter-trigger:focus { outline: none; border-color: #009FD9; box-shadow: 0 0 0 3px rgba(0,159,217,0.15); }
+  .pp-filter-menu { position: absolute; z-index: 50; top: calc(100% + 8px); left: 0; min-width: 100%; max-height: 320px; overflow-y: auto; background: #fff; border: 1px solid rgba(0,0,0,0.08); border-radius: 8px; box-shadow: 0 10px 26px rgba(0,0,0,0.16); padding: 6px; display: none; }
+  .pp-filter.open .pp-filter-menu { display: block; animation: ppDropIn 0.18s ease-out; }
+  .pp-filter-opt { display: block; width: 100%; box-sizing: border-box; text-align: left; background: transparent; border: 0; color: #2A2C2E; font-family: inherit; font-size: 0.95rem; font-weight: 500; border-radius: 6px; padding: 0.5rem 0.9rem; cursor: pointer; white-space: nowrap; transition: background-color 0.15s ease, color 0.15s ease; }
+  .pp-filter-opt:hover, .pp-filter-opt:focus, .pp-filter-opt.active { background-color: rgba(0,159,217,0.14); color: #2A2C2E; outline: none; }
+  @keyframes ppDropIn { from { opacity: 0; transform: translateY(-6px); } to { opacity: 1; transform: translateY(0); } }
 
   .pp-search { position: relative; }
   .pp-search input { width: 280px; max-width: 100%; box-sizing: border-box; padding: 0.62rem 1rem 0.62rem 2.5rem; border: 1px solid #d4d8e0; border-radius: 10px; font-size: 0.95rem; color: #1f2a44; }
@@ -52,10 +61,12 @@
   <div class="pp-top">
     <h1 class="pp-title">Peticiones a producto</h1>
     <div class="pp-controls">
-      <div class="pp-filter">
-        <select id="ppEstado" onchange="ppFilter()">
-          <option value="">Filtrar por Estado</option>
-        </select>
+      <div class="pp-filter" id="ppFilterWrap">
+        <input type="hidden" id="ppEstado" value="" />
+        <button type="button" class="pp-filter-trigger" id="ppFilterTrigger" aria-haspopup="listbox" aria-expanded="false">
+          <span id="ppFilterLabel">Filtrar por Estado</span>
+        </button>
+        <div class="pp-filter-menu" id="ppFilterMenu" role="listbox"></div>
       </div>
       <div class="pp-search">
         <input type="text" id="ppSearch" placeholder="Buscar" oninput="ppFilter()" />

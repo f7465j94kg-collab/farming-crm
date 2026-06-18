@@ -26,24 +26,63 @@
     if (empty) empty.style.display = (visible === 0) ? 'block' : 'none';
   };
 
-  function ppInit() {
-    if (!document.getElementById('ppList')) return;
-    // format prices (empty => 0 €)
-    document.querySelectorAll('.pp-precio').forEach(function (el) { el.textContent = fmtEur(el.getAttribute('data-v')); });
-    var sel = document.getElementById('ppEstado');
-    if (!sel) return;
-    // build the "Filtrar por Estado" options from the estados present in the list
+  // Build a custom dropdown (matches the "Gestión Comercial" header menu).
+  // The chosen estado is kept on the hidden #ppEstado input so ppFilter() is
+  // unchanged. Options are the distinct estados from the cards + the default.
+  var DEFAULT_LABEL = 'Filtrar por Estado';
+
+  function buildFilter() {
+    var wrap = document.getElementById('ppFilterWrap');
+    var trigger = document.getElementById('ppFilterTrigger');
+    var menu = document.getElementById('ppFilterMenu');
+    var hidden = document.getElementById('ppEstado');
+    var label = document.getElementById('ppFilterLabel');
+    if (!wrap || !trigger || !menu || !hidden || !label) return;
+
     var seen = {};
     cards().forEach(function (c) {
       var e = (c.getAttribute('data-estado') || '').trim();
       if (e) { seen[e] = true; }
     });
-    Object.keys(seen).sort().forEach(function (e) {
-      var o = document.createElement('option');
-      o.value = e;
-      o.textContent = e;
-      sel.appendChild(o);
+    var values = [''].concat(Object.keys(seen).sort());
+
+    menu.innerHTML = '';
+    values.forEach(function (v) {
+      var opt = document.createElement('button');
+      opt.type = 'button';
+      opt.className = 'pp-filter-opt';
+      opt.setAttribute('role', 'option');
+      opt.setAttribute('data-value', v);
+      opt.textContent = v === '' ? DEFAULT_LABEL : v;
+      if (v === hidden.value) opt.classList.add('active');
+      opt.addEventListener('click', function () {
+        hidden.value = v;
+        label.textContent = v === '' ? DEFAULT_LABEL : v;
+        Array.prototype.forEach.call(menu.children, function (ch) { ch.classList.remove('active'); });
+        opt.classList.add('active');
+        closeMenu();
+        window.ppFilter();
+      });
+      menu.appendChild(opt);
     });
+
+    function openMenu() { wrap.classList.add('open'); trigger.setAttribute('aria-expanded', 'true'); }
+    function closeMenu() { wrap.classList.remove('open'); trigger.setAttribute('aria-expanded', 'false'); }
+
+    trigger.addEventListener('click', function (e) {
+      e.stopPropagation();
+      if (wrap.classList.contains('open')) closeMenu(); else openMenu();
+    });
+    menu.addEventListener('click', function (e) { e.stopPropagation(); });
+    document.addEventListener('click', function () { closeMenu(); });
+    document.addEventListener('keydown', function (e) { if (e.key === 'Escape') closeMenu(); });
+  }
+
+  function ppInit() {
+    if (!document.getElementById('ppList')) return;
+    // format prices (empty => 0 €)
+    document.querySelectorAll('.pp-precio').forEach(function (el) { el.textContent = fmtEur(el.getAttribute('data-v')); });
+    buildFilter();
   }
 
   if (document.readyState !== 'loading') { ppInit(); }
