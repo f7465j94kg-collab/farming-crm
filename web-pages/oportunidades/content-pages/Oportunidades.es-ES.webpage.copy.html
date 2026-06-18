@@ -5,7 +5,7 @@
     <attribute name="wi_idoportunidad" />
     <attribute name="wi_fase" />
     <attribute name="wi_cuenta" />
-    <attribute name="wi_productobase" />
+    <attribute name="wi_productobasef" />
     <attribute name="wi_preciofinal" />
     <attribute name="createdon" />
     <order attribute="wi_idoportunidad" />
@@ -88,7 +88,7 @@
     {% for o in oportunidades.results.entities %}
     <div class="pp-card"
          data-estado="{{ o.wi_fase.label | escape }}"
-         data-search="{{ o.wi_idoportunidad | escape }} {{ o.wi_fase.label | escape }} {{ o.wi_cuenta.name | escape }} {{ o.wi_productobase.name | escape }}">
+         data-search="{{ o.wi_idoportunidad | escape }} {{ o.wi_fase.label | escape }} {{ o.wi_cuenta.name | escape }} {{ o.wi_productobasef.name | escape }}">
       <div class="pp-col pp-col-id">
         <div class="pp-code">{{ o.wi_idoportunidad | default: '—' | escape }}</div>
         <div class="pp-estado">{{ o.wi_fase.label | default: '—' | escape }}</div>
@@ -99,7 +99,7 @@
         <div class="pp-lbl">CUENTA</div>
       </div>
       <div class="pp-col">
-        <div class="pp-val">{{ o.wi_productobase.name | default: '—' | escape }}</div>
+        <div class="pp-val">{{ o.wi_productobasef.name | default: '—' | escape }}</div>
         <div class="pp-lbl">PRODUCTO</div>
       </div>
       <div class="pp-col">
