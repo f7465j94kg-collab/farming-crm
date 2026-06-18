@@ -8,8 +8,10 @@
     <attribute name="wi_familia" />
     <attribute name="wi_name" />
     <attribute name="wi_fabricante" />
+    <attribute name="wi_lineadenegocio" />
     <attribute name="wi_almacen" />
     <attribute name="wi_precio" />
+    <attribute name="wi_descripcion" />
     {% if sid %}
     <filter type="and">
       <condition attribute="wi_stockid" operator="eq" value="{{ sid | xml_escape }}" />
@@ -17,10 +19,6 @@
     {% endif %}
     <link-entity name="wi_productobasefarming" from="wi_productobasefarmingid" to="wi_productobase" link-type="outer" alias="pbf">
       <attribute name="wi_nombreproducto" />
-      <attribute name="wi_descripcion" />
-      <link-entity name="wi_productobasefabricante" from="wi_productobasefabricanteid" to="wi_productobasefabricante" link-type="outer" alias="fab">
-        <attribute name="wi_descripcion" />
-      </link-entity>
     </link-entity>
   </entity>
 </fetch>
@@ -101,7 +99,7 @@
 {% if s %}
 {% assign fab = s.wi_fabricante.name %}
 {% assign base = s.wi_productobase.name | default: s['pbf.wi_nombreproducto'] %}
-{% assign desc = s['pbf.wi_descripcion'] | default: s['fab.wi_descripcion'] %}
+{% assign desc = s.wi_descripcion %}
 
 <div class="dp-wrap">
   <nav class="dp-bc">
@@ -129,22 +127,13 @@
           </div>
           <div class="dp-prod-info">
             <h2 class="dp-prod-title">{{ base | default: 'Producto' | escape }}</h2>
-            <h3 class="dp-chars-title">Características</h3>
-            <div class="dp-meta">
-              <div class="k">Familia</div>
-              <div class="v">{{ s.wi_familia.name | default: s.wi_familia | default: '—' | escape }}</div>
-            </div>
-            <div class="dp-meta">
-              <div class="k">Nombre</div>
-              <div class="v">{{ s.wi_name | default: '—' | escape }}</div>
-            </div>
             <div class="dp-meta">
               <div class="k">Fabricante</div>
-              <div class="v">{{ s.wi_fabricante.name | default: '—' | escape }}</div>
+              <div class="v">{{ fab | default: '—' | escape }}</div>
             </div>
             <div class="dp-meta">
-              <div class="k">Almacén</div>
-              <div class="v">{{ s.wi_almacen.label | default: '—' | escape }}</div>
+              <div class="k">Producto base</div>
+              <div class="v">{{ base | default: '—' | escape }}</div>
             </div>
           </div>
         </div>
@@ -159,14 +148,43 @@
 
     <div class="dp-right">
       <div class="dp-cfg">
-        <div class="dp-cfg-head">Resumen de la configuración del producto</div>
+        <div class="dp-cfg-head">Características</div>
         <div class="dp-cfg-lines">
           <div class="dp-cfg-line">
             <div class="dp-cfg-info">
-              <div class="dp-cfg-step">Producto</div>
-              <div class="dp-cfg-name">{{ base | default: 'Producto base' | escape }}</div>
+              <div class="dp-cfg-step">Fabricante</div>
+              <div class="dp-cfg-name">{{ fab | default: '—' | escape }}</div>
             </div>
-            <div class="dp-cfg-price dp-precio" data-v="{{ s.wi_precio }}">{{ s.wi_precio }}</div>
+          </div>
+          <div class="dp-cfg-line">
+            <div class="dp-cfg-info">
+              <div class="dp-cfg-step">Producto Base</div>
+              <div class="dp-cfg-name">{{ base | default: '—' | escape }}</div>
+            </div>
+          </div>
+          <div class="dp-cfg-line">
+            <div class="dp-cfg-info">
+              <div class="dp-cfg-step">Producto</div>
+              <div class="dp-cfg-name">{{ s.wi_name | default: '—' | escape }}</div>
+            </div>
+          </div>
+          <div class="dp-cfg-line">
+            <div class="dp-cfg-info">
+              <div class="dp-cfg-step">Familia</div>
+              <div class="dp-cfg-name">{{ s.wi_familia.name | default: '—' | escape }}</div>
+            </div>
+          </div>
+          <div class="dp-cfg-line">
+            <div class="dp-cfg-info">
+              <div class="dp-cfg-step">Línea de negocio</div>
+              <div class="dp-cfg-name">{{ s.wi_lineadenegocio.name | default: '—' | escape }}</div>
+            </div>
+          </div>
+          <div class="dp-cfg-line">
+            <div class="dp-cfg-info">
+              <div class="dp-cfg-step">Almacén</div>
+              <div class="dp-cfg-name">{{ s.wi_almacen.label | default: '—' | escape }}</div>
+            </div>
           </div>
         </div>
         <div class="dp-cfg-total">
