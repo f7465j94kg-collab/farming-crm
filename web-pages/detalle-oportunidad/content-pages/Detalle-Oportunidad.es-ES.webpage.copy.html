@@ -167,9 +167,20 @@
   #do-sysform table.section:has(#createdon),
   #do-sysform table.section:has([id="modifiedon"]),
   #do-sysform table.section:has(td[data-name="createdon"]) { display: table !important; }
-  /* hide the empty tab title if present */
-  #do-sysform .crmEntityFormView > .tab > .tab-title:empty,
-  #do-sysform .crmEntityFormView .tab-title:empty { display: none; }
+  /* Hide every section/tab TITLE rendered by the entityform. The hidden
+     sections (General, COMENTARIOS, CONFIGURACIÓN DE PRODUCTO) and the tab
+     each render their heading in an element ABOVE the field tables — these are
+     what showed as the stray empty "Información de sistema", "COMENTARIOS" and
+     "CONFIGURACIÓN DE PRODUCTO" labels. The visible "Información de sistema"
+     heading is supplied by our own .do-sysheading above, so we hide ALL of the
+     form's own titles (including the system-info section's caption) to avoid a
+     duplicate, keeping only the fields + Enviar button. */
+  #do-sysform .tab-title,
+  #do-sysform .tab-subtitle,
+  #do-sysform .section-title,
+  #do-sysform table.section > caption,
+  #do-sysform table.section > thead,
+  #do-sysform table.section > tbody > tr > td.section-title { display: none !important; }
   /* spacing below the Enviar button so it is not flush with the footer */
   #do-sysform .crmEntityFormView .actions { margin-bottom: 3rem; }
   /* a heading above the system-info form */

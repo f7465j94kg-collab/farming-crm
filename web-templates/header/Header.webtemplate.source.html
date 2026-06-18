@@ -29,6 +29,11 @@
     text-decoration: none !important;
     font-weight: 600 !important;
     text-shadow: 0.3px 0 0 currentColor, -0.3px 0 0 currentColor !important;
+    /* Remove the theme's dashed focus rectangle on any header nav option
+       (nav links, Gestión Comercial dropdown toggle, language, profile) */
+    border: none !important;
+    outline: none !important;
+    box-shadow: none !important;
   }
 
   /* Dropdown menus (Gestión Comercial, profile, language): a clean white panel
@@ -67,6 +72,24 @@
   @keyframes ppDropIn {
     from { opacity: 0; transform: translateY(-6px); }
     to { opacity: 1; transform: translateY(0); }
+  }
+
+  /* Belt-and-braces: kill the theme's dashed focus rectangle
+     (:focus { border:1px dashed black; outline:1px dashed #fff }) on EVERY
+     header nav anchor — covers menu-bar links, the Gestión Comercial / language
+     / profile dropdown toggles and the login/logout link, on click and on
+     keyboard focus alike. */
+  .static-top.navbar .menu-bar > .navbar-nav > li > a:focus,
+  .static-top.navbar .menu-bar > .navbar-nav > li > a:focus-visible,
+  .navbar-dark .navbar-nav > li > a:focus,
+  .navbar-dark .navbar-nav > li > a:focus-visible,
+  .navbar-dark .navbar-nav a:focus,
+  .navbar-dark .navbar-nav a:focus-visible,
+  .navbar-dark .navbar-nav a.nav-link:focus,
+  .navbar-dark .navbar-nav a.dropdown-toggle:focus {
+    border: none !important;
+    outline: none !important;
+    box-shadow: none !important;
   }
 
   /* Keep the mobile menu button visible now that the accent is blue-on-blue */
