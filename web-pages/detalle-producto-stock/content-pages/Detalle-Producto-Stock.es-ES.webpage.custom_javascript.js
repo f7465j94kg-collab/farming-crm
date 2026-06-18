@@ -1,4 +1,20 @@
 (function () {
+  // ---- entity set + nav property names (confirmed against farming-dev metadata) ----
+  var SET_OPP = 'wi_oportunidadfarmings';            // wi_oportunidadfarming
+  var SET_SPS = 'wi_solicituddepedidodestocks';      // wi_solicituddepedidodestock
+  var SET_STOCK = 'wi_stocks';                        // wi_stock
+
+  // Fase choice on the opportunity. "Solicitar Pedido" uses Solicitud de pedido = 2 (mirrors Resumen).
+  var FASE_PEDIDO = 2;
+  // Estado de la solicitud de stock: first / "nueva"-like value = 101 (Solicitud de Stock).
+  var ESTADO_NUEVA = 101;
+
+  // Stamped by the page copy (empty if anonymous / missing).
+  var cuentaId = (typeof CUENTA_ID !== 'undefined') ? CUENTA_ID : '';
+  var contactoId = (typeof CONTACTO_ID !== 'undefined') ? CONTACTO_ID : '';
+  var stockId = (typeof STOCK_ID !== 'undefined') ? STOCK_ID : '';
+  var stockPrecioRaw = (typeof STOCK_PRECIO !== 'undefined') ? STOCK_PRECIO : '';
+
   function fmtEur(v) {
     var n = parseFloat(v);
     if (isNaN(n)) n = 0;
@@ -7,11 +23,87 @@
     return (parts[1] === '00' ? intp : intp + ',' + parts[1]) + ' €';
   }
 
+  function showStatus(msg, kind) {
+    var el = document.getElementById('dpStatus');
+    if (!el) return;
+    el.style.display = 'block';
+    el.className = 'dp-status ' + (kind || '');
+    el.textContent = msg;
+  }
+
+  // Portal request-verification token (same approach as Resumen).
+  function getToken() {
+    return new Promise(function (resolve) {
+      if (window.shell && typeof shell.getTokenDeferred === 'function') {
+        shell.getTokenDeferred().done(function (t) { resolve(t); }).fail(function () { resolve(null); });
+      } else {
+        var input = document.querySelector("[name='__RequestVerificationToken']");
+        resolve(input ? input.value : null);
+      }
+    });
+  }
+
+  function apiCreate(set, payload, token) {
+    return fetch('/_api/' + set, {
+      method: 'POST',
+      headers: {
+        'Content-Type': 'application/json', 'Accept': 'application/json',
+        'OData-MaxVersion': '4.0', 'OData-Version': '4.0',
+        'Prefer': 'return=representation', '__RequestVerificationToken': token || ''
+      },
+      body: JSON.stringify(payload)
+    }).then(function (res) {
+      return res.text().then(function (txt) {
+        if (!res.ok) throw new Error('HTTP ' + res.status + ' en ' + set + ': ' + txt);
+        var id = null, loc = res.headers.get('OData-EntityId') || res.headers.get('Location');
+        if (loc) { var m = loc.match(/\(([^)]+)\)/); if (m) id = m[1]; }
+        return { data: txt ? JSON.parse(txt) : {}, id: id };
+      });
+    });
+  }
+
+  function solicitarStock() {
+    if (!stockId) { showStatus('No se ha podido identificar el producto en stock.', 'err'); return; }
+    if (!confirm('¿Solicitar este producto en stock?')) return;
+
+    var btn = document.getElementById('dpSolicitar');
+    if (btn) btn.disabled = true;
+    showStatus('Creando solicitud...');
+
+    var precio = parseFloat(String(stockPrecioRaw).replace(',', '.'));
+    if (isNaN(precio)) precio = null;
+
+    getToken().then(function (token) {
+      // 1) Opportunity — same cuenta/contacto stamping + fase as Resumen's "Solicitar Pedido", no line items.
+      var oppPayload = { 'wi_fase': FASE_PEDIDO };
+      if (cuentaId) oppPayload['wi_Cuenta@odata.bind'] = '/accounts(' + cuentaId + ')';
+      if (contactoId) oppPayload['wi_Contacto@odata.bind'] = '/contacts(' + contactoId + ')';
+
+      return apiCreate(SET_OPP, oppPayload, token).then(function () {
+        // 2) Stock request — estado default + precio + link to this stock record.
+        var spsPayload = {
+          'wi_estadodelasolicitud': ESTADO_NUEVA,
+          'wi_ProductoStock@odata.bind': '/' + SET_STOCK + '(' + stockId + ')'
+        };
+        if (precio != null) spsPayload.wi_precio = precio;
+        return apiCreate(SET_SPS, spsPayload, token);
+      });
+    }).then(function () {
+      showStatus('Solicitud creada correctamente. Redirigiendo...', 'ok');
+      setTimeout(function () { location.href = '/Oportunidades'; }, 1200);
+    }).catch(function (err) {
+      showStatus('No se ha podido crear la solicitud: ' + err.message, 'err');
+      if (btn) btn.disabled = false;
+    });
+  }
+
   function dpInit() {
     // format price (empty => 0 €), same as the stock list
     document.querySelectorAll('.dp-precio').forEach(function (el) {
       el.textContent = fmtEur(el.getAttribute('data-v'));
     });
+    var btn = document.getElementById('dpSolicitar');
+    if (btn) btn.addEventListener('click', solicitarStock);
   }
 
   if (document.readyState !== 'loading') { dpInit(); }

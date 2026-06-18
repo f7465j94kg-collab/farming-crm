@@ -120,6 +120,14 @@
   adx_name: Webapi/wi_oportunidadfarming/fields
   adx_sitesettingid: a45fdf04-5098-4694-b719-8126d8525d08
   adx_value: '*'
+- adx_description: Enables the portal Web API for the Solicitud de Pedido de Stock table.
+  adx_name: Webapi/wi_solicituddepedidodestock/enabled
+  adx_sitesettingid: f2c356a4-4ad1-4c99-bb73-91508f795bfe
+  adx_value: true
+- adx_description: Fields exposed through the Web API for the Solicitud de Pedido de Stock table.
+  adx_name: Webapi/wi_solicituddepedidodestock/fields
+  adx_sitesettingid: 1717ebd1-769c-4869-9676-3f9d5f61e649
+  adx_value: '*'
 - adx_description: ''
   adx_name: Authentication/OpenAuth/Facebook/AppId
   adx_sitesettingid: aefd1005-293c-4674-8fba-01dc8077c0fd
