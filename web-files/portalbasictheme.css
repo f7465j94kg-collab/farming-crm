@@ -829,7 +829,7 @@ button, input, select, textarea, optgroup,
 
 /* ===== Standard button style (matches the Configurador buttons): rounded + Space Grotesk ===== */
 .btn-primary, .btn-default, .btn-secondary, .button1, .button2 {
-  border-radius: 10px !important;
+  border-radius: 999px !important;
   border-width: 2px !important;
   border-style: solid !important;
   font-weight: 700 !important;
