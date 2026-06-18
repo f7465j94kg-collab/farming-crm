@@ -1,0 +1,128 @@
+{% assign sid = request.params.id %}
+
+{% fetchxml stock %}
+<fetch top="1">
+  <entity name="wi_stock">
+    <attribute name="wi_stockid" />
+    <attribute name="wi_productobase" />
+    <attribute name="wi_familia" />
+    <attribute name="wi_name" />
+    <attribute name="wi_fabricante" />
+    <attribute name="wi_almacen" />
+    <attribute name="wi_precio" />
+    {% if sid %}
+    <filter type="and">
+      <condition attribute="wi_stockid" operator="eq" value="{{ sid | xml_escape }}" />
+    </filter>
+    {% endif %}
+  </entity>
+</fetch>
+{% endfetchxml %}
+
+{% assign s = stock.results.entities.first %}
+
+<style>
+  .dp-wrap { max-width: 1280px; margin: 0 auto; padding: 1.5rem 1rem 3rem; font-family: 'Space Grotesk', sans-serif; color: #15233b; }
+
+  /* breadcrumb */
+  .dp-bc { font-size: 0.9rem; color: #9aa3b2; margin: 0 0 1.4rem; }
+  .dp-bc a { color: #9aa3b2 !important; text-decoration: none !important; }
+  .dp-bc a:hover { color: #009FD9 !important; }
+  .dp-bc .sep { margin: 0 0.4rem; }
+  .dp-bc .cur { color: #45506a; }
+
+  /* title row */
+  .dp-top { display: flex; flex-wrap: wrap; align-items: center; justify-content: space-between; gap: 1rem; margin-bottom: 1.6rem; }
+  .dp-title { font-size: 2.2rem; font-weight: 700; color: #15233b; margin: 0; letter-spacing: -0.01em; }
+
+  /* pill buttons */
+  .dp-btn { display: inline-flex; align-items: center; justify-content: center; padding: 0.62rem 1.5rem; border-radius: 999px; font-size: 0.95rem; font-weight: 700; text-decoration: none !important; cursor: pointer; border: 1px solid transparent; transition: background 0.15s ease, border-color 0.15s ease, color 0.15s ease; font-family: inherit; }
+  .dp-btn-ghost { background: #fff; color: #009FD9 !important; border: 1px solid #b3e3f5; }
+  .dp-btn-ghost:hover { background: #f0fafe; border-color: #009FD9; color: #009FD9 !important; }
+
+  /* product card (single Configurador-step look) */
+  .dp-card { background: #fff; border: 1px solid #eef0f3; border-radius: 16px; box-shadow: 0 2px 14px rgba(20,35,59,0.06); padding: 1.6rem 1.7rem; }
+  .dp-prod { display: flex; gap: 1.8rem; align-items: flex-start; }
+  .dp-prod-img { position: relative; flex: 0 0 280px; max-width: 280px; min-height: 210px; border: 1px solid #eef0f3; border-radius: 12px; overflow: hidden; background: #fff; display: flex; align-items: center; justify-content: center; }
+  .dp-bg { position: absolute; top: 0; left: 0; width: 100%; height: 100%; object-fit: cover; opacity: 0.28; }
+  .dp-logo { position: relative; z-index: 1; max-width: 72%; max-height: 64%; object-fit: contain; mix-blend-mode: multiply; }
+  .dp-prod-ph { position: relative; z-index: 1; font-size: 2.6rem; color: #c2c8d2; }
+  .dp-prod-info { flex: 1 1 auto; min-width: 0; }
+  .dp-prod-title { font-size: 1.4rem; font-weight: 700; color: #15233b; margin: 0 0 1.3rem; text-transform: uppercase; letter-spacing: 0.01em; }
+  @media (max-width: 640px) { .dp-prod { flex-direction: column; } .dp-prod-img { flex-basis: auto; max-width: 100%; width: 100%; } }
+
+  /* characteristics grid */
+  .dp-chars { display: grid; grid-template-columns: repeat(2, minmax(0, 1fr)); gap: 1.1rem 2rem; }
+  .dp-meta .k { color: #9aa3b2; font-size: 0.7rem; font-weight: 700; letter-spacing: 0.04em; text-transform: uppercase; }
+  .dp-meta .v { color: #1f2a44; font-size: 1.05rem; font-weight: 600; margin-top: 0.18rem; word-break: break-word; }
+  .dp-meta.precio .v { color: #009FD9; font-weight: 800; font-size: 1.25rem; }
+  @media (max-width: 520px) { .dp-chars { grid-template-columns: 1fr; } }
+
+  .dp-notfound { background: #fff; border: 1px solid #eef0f3; border-radius: 16px; padding: 2.5rem; text-align: center; color: #9aa3b2; font-size: 1rem; }
+</style>
+
+{% if s %}
+{% assign fab = s.wi_fabricante.name %}
+
+<div class="dp-wrap">
+  <nav class="dp-bc">
+    <a href="/productos-en-stock">Productos en stock</a>
+    <span class="sep">/</span>
+    <span class="cur">Detalle</span>
+  </nav>
+
+  <div class="dp-top">
+    <h1 class="dp-title">{{ s.wi_productobase.name | default: 'Detalle del producto' | escape }}</h1>
+    <a class="dp-btn dp-btn-ghost" href="/productos-en-stock">Volver</a>
+  </div>
+
+  <div class="dp-card">
+    <div class="dp-prod">
+      <div class="dp-prod-img">
+        {% if fab and fab != '' %}
+        <img class="dp-bg" src="https://farmingpalencia.sharepoint.com/sites/CRMLibrary/CRM_DEV/Fabricantes/{{ fab | replace: ' ', '%20' }}/{{ fab | replace: ' ', '%20' }}%20fondo.png" alt="" aria-hidden="true" onerror="this.style.display='none'" />
+        <img class="dp-logo" src="https://farmingpalencia.sharepoint.com/sites/CRMLibrary/CRM_DEV/Fabricantes/{{ fab | replace: ' ', '%20' }}/{{ fab | replace: ' ', '%20' }}%20logo.png" alt="{{ fab | escape }}" onerror="this.style.display='none';var ph=this.parentNode.querySelector('.dp-prod-ph');if(ph){ph.style.display='block';}" />
+        <span class="dp-prod-ph" aria-hidden="true" style="display:none;">&#9881;</span>
+        {% else %}
+        <span class="dp-prod-ph" aria-hidden="true">&#9881;</span>
+        {% endif %}
+      </div>
+      <div class="dp-prod-info">
+        <h2 class="dp-prod-title">{{ s.wi_productobase.name | default: 'Producto' | escape }}</h2>
+        <div class="dp-chars">
+          <div class="dp-meta">
+            <div class="k">Familia</div>
+            <div class="v">{{ s.wi_familia.name | default: s.wi_familia | default: '—' | escape }}</div>
+          </div>
+          <div class="dp-meta">
+            <div class="k">Nombre</div>
+            <div class="v">{{ s.wi_name | default: '—' | escape }}</div>
+          </div>
+          <div class="dp-meta">
+            <div class="k">Fabricante</div>
+            <div class="v">{{ s.wi_fabricante.name | default: '—' | escape }}</div>
+          </div>
+          <div class="dp-meta">
+            <div class="k">Almacén</div>
+            <div class="v">{{ s.wi_almacen.label | default: '—' | escape }}</div>
+          </div>
+          <div class="dp-meta precio">
+            <div class="k">Precio</div>
+            <div class="v dp-precio" data-v="{{ s.wi_precio }}">{{ s.wi_precio }}</div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+
+{% else %}
+<div class="dp-wrap">
+  <nav class="dp-bc">
+    <a href="/productos-en-stock">Productos en stock</a>
+    <span class="sep">/</span>
+    <span class="cur">Detalle</span>
+  </nav>
+  <div class="dp-notfound">No se ha encontrado el producto solicitado.</div>
+</div>
+{% endif %}
