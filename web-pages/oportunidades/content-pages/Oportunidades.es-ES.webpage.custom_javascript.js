@@ -106,6 +106,9 @@
           t.setAttribute('aria-selected', active ? 'true' : 'false');
           var panel = document.getElementById(t.getAttribute('data-panel'));
           if (panel) panel.hidden = !active;
+          // swap the controls group on the shared tab row to match the active tab
+          var ctrls = document.getElementById(t.getAttribute('data-controls'));
+          if (ctrls) ctrls.hidden = !active;
         });
       });
     });
