@@ -8,7 +8,8 @@
     <attribute name="wi_productobasef" />
     <attribute name="wi_preciofinal" />
     <attribute name="createdon" />
-    <order attribute="wi_idoportunidad" />
+    <attribute name="modifiedon" />
+    <order attribute="modifiedon" descending="true" />
   </entity>
 </fetch>
 {% endfetchxml %}
@@ -158,7 +159,7 @@
         <div class="pp-lbl">PRODUCTO</div>
       </div>
       <div class="pp-col">
-        <div class="pp-val">{{ o.createdon | date: 'dd/MM/yyyy' }}</div>
+        <div class="pp-val">{{ o.modifiedon | date: 'dd/MM/yyyy' }}</div>
         <div class="pp-lbl">FECHA DE PEDIDO</div>
       </div>
       <div class="pp-col">

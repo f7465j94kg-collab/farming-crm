@@ -334,6 +334,13 @@
       document.getElementById('rsmNuevo').style.display = 'inline-flex';
       // Edit done: clear the edit flag so a later "Nuevo pedido" starts clean.
       if (isEdit && window.CFG.setEditId) window.CFG.setEditId(null);
+      // EDIT path only: after a successful update (opp PATCH + line-items
+      // reconcile both resolved — we're inside the success .then, not .catch),
+      // redirect to the Oportunidades list. Brief delay so the user sees the
+      // "actualizado" message first. The create path stays on this page.
+      if (isEdit) {
+        setTimeout(function () { window.location.href = '/Oportunidades'; }, 1200);
+      }
     }).catch(function (err) {
       showStatus('❌ ' + err.message, 'err');
       setBusy(false);
