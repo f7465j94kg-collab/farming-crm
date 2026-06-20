@@ -77,40 +77,63 @@
   // record ids are NOT stored on the opp/lines, so they cannot be restored —
   // the stepper pages won't re-check, but Resumen + the save reconcile only
   // need {label, price}). Also restores wi_comentarios and the model name.
+  //
+  // Robustness: the two reads run INDEPENDENTLY (not Promise.all) so a failure
+  // in one does not blank the other, and we avoid two query features that the
+  // portal Web API rejects with a 400 (which previously killed the whole load
+  // and left Resumen empty): (1) $orderby on wi_nivel — Resumen renders by step
+  // order anyway, so we don't sort server-side; (2) $expand of the model lookup
+  // — we read the flat _wi_productobasef_value + wi_precioproductobase and fetch
+  // the model name in a separate, optional GET.
+  function fetchOpp(oppId) {
+    var url = '/_api/wi_oportunidadfarmings(' + oppId + ')' +
+              '?$select=wi_oportunidadfarmingid,_wi_productobasef_value,wi_precioproductobase,wi_comentarios,wi_fase';
+    return apiGet(url).catch(function () { return {}; });
+  }
+  function fetchLines(oppId) {
+    var url = '/_api/wi_productlineitemses?$select=wi_nivel,wi_precio' +
+              '&$filter=_wi_oportunidad_value eq ' + oppId;
+    return apiGet(url).then(function (d) { return (d && d.value) || []; })
+                      .catch(function () { return []; });
+  }
+  // Optional model name/price lookup; never fatal.
+  function fetchModelo(pbId) {
+    if (!pbId) return Promise.resolve(null);
+    var url = '/_api/wi_productobasefarmings(' + pbId + ')?$select=wi_productobasefarmingid,wi_nombreproducto,wi_pvp';
+    return apiGet(url).catch(function () { return null; });
+  }
+
   function loadEdit(oppId) {
     if (!oppId) return Promise.resolve(null);
-    var base = '/_api/wi_oportunidadfarmings(' + oppId + ')';
-    var oppUrl = base + '?$select=wi_oportunidadfarmingid,wi_precioproductobase,wi_comentarios,wi_fase' +
-                 '&$expand=wi_ProductoBaseF($select=wi_productobasefarmingid,wi_nombreproducto,wi_pvp)';
-    var linesUrl = '/_api/wi_productlineitemses?$select=wi_nivel,wi_precio' +
-                   '&$filter=_wi_oportunidad_value eq ' + oppId + '&$orderby=wi_nivel';
-    return Promise.all([apiGet(oppUrl), apiGet(linesUrl)]).then(function (r) {
-      var opp = r[0] || {}, lines = (r[1] && r[1].value) || [];
-      var s = {};
-      var pbf = opp.wi_ProductoBaseF;
-      if (pbf) {
-        s.productobase = {
-          id: pbf.wi_productobasefarmingid,
-          label: pbf.wi_nombreproducto || '',
-          price: Number(opp.wi_precioproductobase != null ? opp.wi_precioproductobase : (pbf.wi_pvp || 0))
-        };
-      } else if (opp.wi_precioproductobase != null) {
-        // model lookup empty but a base price exists — keep the price so totals match
-        s.productobase = { id: '', label: '', price: Number(opp.wi_precioproductobase) };
-      }
-      var opc = [];
-      lines.forEach(function (ln) {
-        var p = parseNivel(ln.wi_nivel);
-        if (!p) return;
-        var price = Number(ln.wi_precio || 0);
-        if (p.key === 'opcional') { opc.push({ id: '', label: p.label, price: price }); }
-        else { s[p.key] = { id: '', label: p.label, price: price }; }
+    return fetchOpp(oppId).then(function (opp) {
+      opp = opp || {};
+      var pbId = opp._wi_productobasef_value || '';
+      return fetchModelo(pbId).then(function (pbf) {
+        return fetchLines(oppId).then(function (lines) {
+          var s = {};
+          var hasPrice = opp.wi_precioproductobase != null;
+          if (pbId || hasPrice || pbf) {
+            s.productobase = {
+              id: pbId || (pbf && pbf.wi_productobasefarmingid) || '',
+              label: (pbf && pbf.wi_nombreproducto) || '',
+              price: Number(hasPrice ? opp.wi_precioproductobase : ((pbf && pbf.wi_pvp) || 0))
+            };
+          }
+          var opc = [];
+          lines.forEach(function (ln) {
+            var p = parseNivel(ln.wi_nivel);
+            if (!p) return;
+            var price = Number(ln.wi_precio || 0);
+            if (p.key === 'opcional') { opc.push({ id: '', label: p.label, price: price }); }
+            else { s[p.key] = { id: '', label: p.label, price: price }; }
+          });
+          if (opc.length) s.opcionales = opc;
+          s.__editId = oppId;
+          if (opp.wi_comentarios) s.__comentarios = opp.wi_comentarios;
+          save(s); // writes state + dispatches cfg:changed so Resumen re-renders
+          return s;
+        });
       });
-      if (opc.length) s.opcionales = opc;
-      s.__editId = oppId;
-      if (opp.wi_comentarios) s.__comentarios = opp.wi_comentarios;
-      save(s);
-      return s;
     });
   }
 
