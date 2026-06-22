@@ -1,3 +1,212 @@
+<style>
+  /* ============================================================
+     Detalle Peticion a Producto — page-scoped restyle.
+     Everything below is scoped under .ppp-wrap (the page heading
+     block) or .ppp-form (the wrapper around the entityform), so it
+     does not affect entityforms on other pages.
+     The form itself is still {% entityform %} (entity
+     wi_peticionaproducto) — we only restyle the markup it renders.
+     ============================================================ */
+
+  .ppp-wrap {
+    max-width: 1180px;
+    margin: 0 auto;
+    padding: 3.5rem 1rem 1.25rem;
+    font-family: 'Space Grotesk', 'Segoe UI', Arial, sans-serif;
+  }
+  .ppp-title {
+    font-size: 2.4rem;
+    font-weight: 700;
+    color: #15233b;
+    letter-spacing: -0.01em;
+    margin: 0 0 1.75rem;
+    line-height: 1.15;
+  }
+  .ppp-subtitle {
+    font-size: 1.35rem;
+    font-weight: 700;
+    color: #15233b;
+    margin: 0 0 0.6rem;
+  }
+  .ppp-intro {
+    font-size: 1.02rem;
+    line-height: 1.6;
+    color: #45506a;
+    max-width: 760px;
+    margin: 0;
+  }
+
+  /* ---- Wrapper around the entityform ---- */
+  .ppp-form {
+    max-width: 1180px;
+    margin: 0 auto;
+    padding: 1.5rem 1rem 4rem;
+    font-family: 'Space Grotesk', 'Segoe UI', Arial, sans-serif;
+  }
+
+  /* Kill the default CRM table chrome so we can flow fields with CSS. */
+  .ppp-form .crmEntityFormView,
+  .ppp-form .crmEntityFormView table,
+  .ppp-form .crmEntityFormView tbody,
+  .ppp-form .crmEntityFormView .tab,
+  .ppp-form .crmEntityFormView .tab-column,
+  .ppp-form .crmEntityFormView .section {
+    background: transparent !important;
+    border: none !important;
+    width: 100% !important;
+  }
+
+  /* Hide CRM section/tab heading chrome that isn't in the mockup. */
+  .ppp-form .crmEntityFormView .tab > .tab-title,
+  .ppp-form .crmEntityFormView .section > .section-title,
+  .ppp-form .crmEntityFormView legend {
+    display: none !important;
+  }
+
+  /* Lay the field rows of each section into a responsive 2-col grid.
+     Standard Power Pages markup renders one <tr> per form row and one
+     <td class="cell"> per field. We flatten that table to a grid so the
+     fields sit side-by-side regardless of the Dataverse column layout. */
+  .ppp-form .crmEntityFormView .section > table > tbody {
+    display: grid !important;
+    grid-template-columns: 1fr 1fr;
+    gap: 1.4rem 1.6rem;
+  }
+  .ppp-form .crmEntityFormView .section > table > tbody > tr {
+    display: contents !important;
+  }
+  .ppp-form .crmEntityFormView td.cell {
+    display: block !important;
+    width: auto !important;
+    padding: 0 !important;
+    vertical-align: top;
+  }
+  /* Drop empty spacer cells the CRM form emits. */
+  .ppp-form .crmEntityFormView td.cell.zero-cell {
+    display: none !important;
+  }
+
+  /* Label above each field. */
+  .ppp-form .crmEntityFormView .info {
+    display: block;
+    margin: 0 0 0.5rem;
+    padding: 0;
+    float: none !important;
+    width: auto !important;
+    text-align: left !important;
+  }
+  .ppp-form .crmEntityFormView .info label,
+  .ppp-form .crmEntityFormView label.control-label {
+    font-family: 'Space Grotesk', 'Segoe UI', Arial, sans-serif !important;
+    font-size: 0.98rem;
+    font-weight: 700;
+    color: #15233b;
+  }
+  /* Required asterisk in brand-neutral red (theme already colors it). */
+
+  /* The control container (Power Pages wraps the control in .control). */
+  .ppp-form .crmEntityFormView .control {
+    width: 100% !important;
+    float: none !important;
+  }
+
+  /* Inputs / selects / textareas — rounded, padded, brand focus ring. */
+  .ppp-form .crmEntityFormView input[type="text"],
+  .ppp-form .crmEntityFormView input[type="email"],
+  .ppp-form .crmEntityFormView input[type="tel"],
+  .ppp-form .crmEntityFormView input[type="number"],
+  .ppp-form .crmEntityFormView input.text,
+  .ppp-form .crmEntityFormView select,
+  .ppp-form .crmEntityFormView textarea {
+    width: 100% !important;
+    box-sizing: border-box;
+    padding: 0.7rem 1rem;
+    border: 1px solid #d4d8e0;
+    border-radius: 12px;
+    background: #fff;
+    font-family: 'Space Grotesk', 'Segoe UI', Arial, sans-serif !important;
+    font-size: 0.98rem;
+    color: #1f2a44;
+    line-height: 1.4;
+    box-shadow: none;
+    transition: border-color 0.15s ease, box-shadow 0.15s ease;
+  }
+  .ppp-form .crmEntityFormView input[type="text"]::placeholder,
+  .ppp-form .crmEntityFormView textarea::placeholder {
+    color: #9aa3b2;
+  }
+  .ppp-form .crmEntityFormView input[type="text"]:focus,
+  .ppp-form .crmEntityFormView input[type="email"]:focus,
+  .ppp-form .crmEntityFormView input.text:focus,
+  .ppp-form .crmEntityFormView select:focus,
+  .ppp-form .crmEntityFormView textarea:focus {
+    outline: none;
+    border-color: #009FD9;
+    box-shadow: 0 0 0 3px rgba(0,159,217,0.15);
+  }
+  .ppp-form .crmEntityFormView textarea {
+    min-height: 150px;
+    resize: vertical;
+  }
+
+  /* Comentario should span the full width (full row in the 2-col grid).
+     Targets the cell that contains the wi_comentario control by id. */
+  .ppp-form .crmEntityFormView td.cell:has(#wi_comentario),
+  .ppp-form .crmEntityFormView td.cell:has([id$="wi_comentario"]) {
+    grid-column: 1 / -1;
+  }
+
+  /* Submit button → site primary pill. */
+  .ppp-form .crmEntityFormView .actions {
+    margin-top: 2rem;
+    text-align: left;
+  }
+  .ppp-form .crmEntityFormView .actions input[type="submit"],
+  .ppp-form .crmEntityFormView .actions .btn,
+  .ppp-form .crmEntityFormView .actions button[type="submit"] {
+    -webkit-appearance: none;
+    appearance: none;
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    padding: 0.7rem 2.2rem;
+    border-radius: 999px;
+    background: #009FD9;
+    color: #fff !important;
+    border: 1px solid #009FD9;
+    font-family: 'Space Grotesk', 'Segoe UI', Arial, sans-serif !important;
+    font-size: 1rem;
+    font-weight: 700;
+    cursor: pointer;
+    box-shadow: none;
+    transition: background 0.15s ease, border-color 0.15s ease;
+  }
+  .ppp-form .crmEntityFormView .actions input[type="submit"]:hover,
+  .ppp-form .crmEntityFormView .actions .btn:hover,
+  .ppp-form .crmEntityFormView .actions button[type="submit"]:hover {
+    background: #0080B5;
+    border-color: #0080B5;
+  }
+
+  /* Validation summary kept (functional) but softened. */
+  .ppp-form .crmEntityFormView .validation-summary {
+    border-radius: 12px;
+  }
+
+  @media (max-width: 760px) {
+    .ppp-form .crmEntityFormView .section > table > tbody {
+      grid-template-columns: 1fr;
+    }
+    .ppp-title { font-size: 1.95rem; }
+  }
+</style>
+
+<div class="ppp-wrap">
+  <h1 class="ppp-title">Solicitud de información a Producto</h1>
+  <h2 class="ppp-subtitle">¿Necesitas más información?</h2>
+  <p class="ppp-intro">Ponte en contacto con el equipo de Producto de Farming Agrícola. Recibiremos tu solicitud y nos pondremos en contacto contigo lo antes posible</p>
+</div>
+
 <div class="row sectionBlockLayout text-start" style="display: flex; flex-wrap: wrap; margin: 0px; min-height: auto; padding: 8px;">
-  <div class="container" style="display: flex; flex-wrap: wrap;"><div class="col-lg-12 columnBlockLayout" style="flex-grow: 1; display: flex; flex-direction: column; min-width: 250px; padding: 16px; margin: 60px 0px;">{% entityform name: 'Detalle Peticion Producto Portal' %}</div></div>
+  <div class="container" style="display: flex; flex-wrap: wrap;"><div class="col-lg-12 columnBlockLayout ppp-form" style="flex-grow: 1; display: flex; flex-direction: column; min-width: 250px; padding: 16px;">{% entityform name: 'Detalle Peticion Producto Portal' %}</div></div>
 </div>
