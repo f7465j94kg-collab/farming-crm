@@ -40,6 +40,7 @@
   .ppp-form {
     max-width: 1180px;
     margin: 0 auto;
+    /* ~24px top gap between the intro paragraph and the first field. */
     padding: 1.5rem 1rem 4rem;
     font-family: 'Space Grotesk', 'Segoe UI', Arial, sans-serif;
   }
@@ -70,7 +71,9 @@
   .ppp-form .crmEntityFormView .section > table > tbody {
     display: grid !important;
     grid-template-columns: 1fr 1fr;
-    gap: 1.4rem 1.6rem;
+    /* Row gap ~26px between field groups, column gap ~26px between the
+       two columns. The row gap is what gives each field breathing room. */
+    gap: 1.625rem 1.6rem;
   }
   .ppp-form .crmEntityFormView .section > table > tbody > tr {
     display: contents !important;
@@ -89,7 +92,8 @@
   /* Label above each field. */
   .ppp-form .crmEntityFormView .info {
     display: block;
-    margin: 0 0 0.5rem;
+    /* ~7px gap between a label and its own input. */
+    margin: 0 0 0.45rem;
     padding: 0;
     float: none !important;
     width: auto !important;
