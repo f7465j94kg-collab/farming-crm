@@ -12,30 +12,43 @@
 <script>
 (function () {
   if (!window.CFG) return;
-  // Strict step-by-step navigation: a step is clickable ONLY if it is the
-  // current step or already reached (CFG.urlFor returns a URL for it). Steps
-  // not yet reached (e.g. Resumen from step 1, or any step ahead of the
-  // furthest reached one) render as a non-clickable greyed label: we strip the
-  // href so the <a> is not navigable and add .is-disabled (cursor:default,
-  // pointer-events:none). Re-runs on every cfg:changed so steps lock/unlock as
-  // the user progresses or as edit-mode pre-load restores the configuration.
+  // ORIGINAL progressive-unlock behaviour: a step becomes a clickable link only
+  // once it is reachable (CFG.urlFor returns a URL); reachability advances as the
+  // user moves forward with "Siguiente". We do NOT lock steps ahead of the
+  // furthest reached one beyond what the original did.
   function wire() {
     document.querySelectorAll('.cfg-steps .cfg-step').forEach(function (el) {
-      if (el.classList.contains('is-current')) {
-        el.removeAttribute('href');
-        el.classList.remove('is-disabled');
+      var step = el.getAttribute('data-step');
+
+      // RESUMEN ONLY: keep it non-clickable + greyed until it is actually
+      // reachable. resumen is only reachable once a producto base is chosen
+      // (CFG.urlFor('resumen') is null until productobase.id exists). The
+      // earlier attempt left it clickable because, when it was the current step
+      // or had a previously-set href that was never cleared, the href survived.
+      // Here we explicitly strip resumen's href and add .is-disabled whenever it
+      // is not reachable, and only restore a clickable link when it is.
+      if (step === 'resumen') {
+        if (el.classList.contains('is-current')) {
+          el.removeAttribute('href');
+          el.classList.remove('is-disabled');
+          return;
+        }
+        var rurl = window.CFG.urlFor('resumen');
+        if (rurl) {
+          el.setAttribute('href', rurl);
+          el.classList.remove('is-disabled');
+        } else {
+          el.removeAttribute('href');
+          el.classList.add('is-disabled');
+        }
         return;
       }
-      var url = window.CFG.urlFor(el.getAttribute('data-step'));
-      if (url) {
-        // Reached/completed -> navigable link.
-        el.setAttribute('href', url);
-        el.classList.remove('is-disabled');
-      } else {
-        // Not yet reached -> non-clickable greyed label.
-        el.removeAttribute('href');
-        el.classList.add('is-disabled');
-      }
+
+      // All other steps: original behaviour, untouched.
+      if (el.classList.contains('is-current')) return;
+      var url = window.CFG.urlFor(step);
+      if (url) { el.setAttribute('href', url); el.classList.remove('is-disabled'); }
+      else { el.classList.add('is-disabled'); }
     });
   }
   wire();
