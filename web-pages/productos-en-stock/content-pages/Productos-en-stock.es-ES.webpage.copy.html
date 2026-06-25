@@ -8,6 +8,10 @@
     <attribute name="wi_fabricante" />
     <attribute name="wi_almacen" />
     <attribute name="wi_precio" />
+    <filter type="or">
+      <condition attribute="wi_usado" operator="ne" value="true" />
+      <condition attribute="wi_usado" operator="null" />
+    </filter>
     <order attribute="wi_name" />
   </entity>
 </fetch>
