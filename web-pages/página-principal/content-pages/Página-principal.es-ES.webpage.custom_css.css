@@ -1,0 +1,125 @@
+/* ===== Página principal (Inicio) — estilos propios de la página =====
+   Movidos desde el <style> inline del copy.html a este custom_css.css (que la
+   plataforma inyecta en el <head>). Son clases únicas de la home (.home-*) que
+   NO sobreescriben farming.css, por lo que el orden de carga es indiferente.
+   Tokens (var(--fm-*)) definidos en web-files/farming.css. */
+
+.home-wrap { font-family: var(--fm-font); max-width: 1180px; margin: 0 auto; padding: 0 1rem 3.5rem; }
+
+/* Clip any horizontal overshoot from the hero's full-bleed breakout so the
+   page never shows a horizontal scrollbar. (Solo aplica en la home: este CSS se
+   inyecta únicamente en esta página.) */
+html, body { overflow-x: hidden; }
+.wrapper-body { overflow-x: hidden; }
+
+/* Hero band — full-bleed band que llena el ancho del body (alinea con el footer). */
+.home-hero {
+  position: relative;
+  width: 100vw;
+  margin-left: calc(50% - 50vw);
+  margin-right: calc(50% - 50vw);
+  overflow: hidden;
+  min-height: 420px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  text-align: center;
+  margin-top: 0;
+  margin-bottom: 2.5rem;
+  background-image: url('https://farmingpalencia.sharepoint.com/sites/CRMLibrary/CRM_DEV/Tools/atardecer-farming-agricola.jpg');
+  background-size: cover;
+  background-position: center;
+}
+/* Subtle dark overlay only for title legibility */
+.home-hero::before {
+  content: "";
+  position: absolute;
+  inset: 0;
+  background: linear-gradient(180deg, rgba(0,0,0,0.10) 0%, rgba(0,0,0,0.28) 100%);
+}
+.home-hero-title {
+  position: relative;
+  z-index: 1;
+  color: #ffffff;
+  font-family: var(--fm-font);
+  font-weight: 700;
+  font-size: clamp(2.2rem, 5vw, 3.6rem);
+  line-height: 1.1;
+  margin: 0;
+  padding: 1rem;
+  text-shadow: 0 2px 14px rgba(0,0,0,0.45);
+}
+
+/* Intro line */
+.home-intro {
+  text-align: center;
+  color: var(--fm-ink-3);
+  font-size: clamp(1.05rem, 2.2vw, 1.35rem);
+  line-height: 1.5;
+  max-width: 820px;
+  margin: 0 auto 2.75rem;
+}
+
+/* Cards */
+.home-cards { display: flex; flex-direction: column; gap: 1.75rem; }
+.home-card {
+  display: flex;
+  align-items: stretch;
+  background: #ffffff;
+  border-radius: 16px;
+  box-shadow: 0 6px 24px rgba(31,42,68,0.10);
+  overflow: hidden;
+}
+.home-card-img {
+  flex: 0 0 38%;
+  max-width: 38%;
+  object-fit: cover;
+  min-height: 230px;
+}
+.home-card-body {
+  flex: 1 1 auto;
+  padding: 2rem 2.25rem;
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+}
+.home-card-body h2 {
+  font-family: var(--fm-font);
+  font-weight: 700;
+  color: var(--fm-ink-3);
+  font-size: 1.6rem;
+  margin: 0 0 0.65rem;
+}
+.home-card-body p {
+  color: var(--fm-text);
+  font-size: 1rem;
+  line-height: 1.55;
+  margin: 0 0 1.4rem;
+}
+.home-card-btn {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  align-self: flex-start;
+  background: var(--fm-brand);
+  color: #ffffff !important;
+  border: 1px solid var(--fm-brand);
+  border-radius: 999px;
+  font-weight: 700;
+  font-size: 1rem;
+  padding: 0.65rem 1.6rem;
+  text-decoration: none !important;
+  transition: background-color 0.15s ease, border-color 0.15s ease;
+  font-family: var(--fm-font);
+}
+.home-card-btn:hover, .home-card-btn:focus {
+  background: var(--fm-brand-700);
+  border-color: var(--fm-brand-700);
+  color: #ffffff !important;
+  text-decoration: none !important;
+}
+
+@media (max-width: 768px) {
+  .home-card { flex-direction: column; }
+  .home-card-img { flex-basis: auto; max-width: 100%; width: 100%; height: 200px; }
+}
