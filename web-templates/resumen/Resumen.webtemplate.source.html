@@ -6,7 +6,7 @@
 
     <div class="rsm-wrap">
       <div class="rsm-back-row">
-        <button type="button" class="cfg-btn cfg-btn-ghost" onclick="history.back()">Atrás</button>
+        <button type="button" class="fm-btn fm-btn--ghost" onclick="history.back()">Atrás</button>
       </div>
       <h2 class="cfg-h2">Resumen del pedido</h2>
       <p class="rsm-sub">Revisa tu configuración antes de confirmar el pedido.</p>
@@ -30,9 +30,9 @@
       </div>
 
       <div class="rsm-actions">
-        <button type="button" id="rsmPresupuesto" class="cfg-btn cfg-btn-ghost rsm-ghost-cta" onclick="crearPresupuesto()">Crear Borrador</button>
-        <button type="button" id="rsmCrear" class="cfg-btn cfg-btn-primary rsm-ghost-cta" onclick="solicitarPedido()">Solicitar Pedido</button>
-        <button type="button" id="rsmNuevo" class="cfg-btn cfg-btn-primary" style="display:none;" onclick="nuevoPedido()">Nuevo pedido</button>
+        <button type="button" id="rsmPresupuesto" class="fm-btn fm-btn--ghost rsm-ghost-cta" onclick="crearPresupuesto()">Crear Borrador</button>
+        <button type="button" id="rsmCrear" class="fm-btn fm-btn--primary rsm-ghost-cta" onclick="solicitarPedido()">Solicitar Pedido</button>
+        <button type="button" id="rsmNuevo" class="fm-btn fm-btn--primary" style="display:none;" onclick="nuevoPedido()">Nuevo pedido</button>
       </div>
     </div>
   </div>
@@ -46,8 +46,8 @@
     <h3 id="rsmModalTitle" class="rsm-modal-title">Confirmar pedido</h3>
     <p id="rsmModalBody" class="rsm-modal-body"></p>
     <div class="rsm-modal-actions">
-      <button type="button" id="rsmModalNo" class="cfg-btn cfg-btn-ghost">Cancelar</button>
-      <button type="button" id="rsmModalSi" class="cfg-btn cfg-btn-primary">Confirmar</button>
+      <button type="button" id="rsmModalNo" class="fm-btn fm-btn--ghost">Cancelar</button>
+      <button type="button" id="rsmModalSi" class="fm-btn fm-btn--primary">Confirmar</button>
     </div>
   </div>
 </div>
@@ -101,7 +101,6 @@
   .rsm-modal-title { font-size: 1.25rem; font-weight: 700; color: var(--fm-ink); margin: 0 0 0.6rem; letter-spacing: -0.01em; }
   .rsm-modal-body { font-size: 0.95rem; color: var(--fm-text); line-height: 1.5; margin: 0 0 1.5rem; }
   .rsm-modal-actions { display: flex; justify-content: flex-end; gap: 0.7rem; flex-wrap: wrap; }
-  .rsm-modal-actions .cfg-btn:disabled { opacity: 0.5; cursor: not-allowed; }
 </style>
 
 <script>

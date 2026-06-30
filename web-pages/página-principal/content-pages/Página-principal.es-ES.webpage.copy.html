@@ -1,7 +1,7 @@
 <!-- Estilos de la home (.home-*) movidos a su custom_css.css (inyectado en <head>). -->
 
 <div class="home-wrap">
-  <div class="home-hero">
+  <div class="home-hero" style="background-image: url('/atardecer-farming-agricola.jpg');">
     <h1 class="home-hero-title">El portal de Farming</h1>
   </div>
 
@@ -36,7 +36,7 @@
       <div class="home-card-body">
         <h2>{{ oppTitle | escape }}</h2>
         <p>Lorem ipsum dolor sit amet, consectetur adipiscing elit. Consulta el estado de tus pedidos comerciales y avanza en su gestión desde un único lugar. Sed do eiusmod tempor incididunt ut labore.</p>
-        <a class="home-card-btn" href="/Oportunidades">Ver {{ oppTitle | downcase | escape }}</a>
+        <a class="fm-btn fm-btn--primary home-card-btn" href="/Oportunidades">Ver {{ oppTitle | downcase | escape }}</a>
       </div>
     </div>
 
@@ -45,7 +45,7 @@
       <div class="home-card-body">
         <h2>Peticiones a producto</h2>
         <p>Lorem ipsum dolor sit amet, consectetur adipiscing elit. Crea y revisa tus peticiones a producto y mantén el seguimiento de cada solicitud. Ut enim ad minim veniam, quis nostrud exercitation.</p>
-        <a class="home-card-btn" href="/Contacto">Ver peticiones</a>
+        <a class="fm-btn fm-btn--primary home-card-btn" href="/Contacto">Ver peticiones</a>
       </div>
     </div>
 
@@ -54,7 +54,7 @@
       <div class="home-card-body">
         <h2>Productos en Stock</h2>
         <p>Lorem ipsum dolor sit amet, consectetur adipiscing elit. Explora los productos disponibles en stock y consulta su disponibilidad actualizada. Duis aute irure dolor in reprehenderit in voluptate.</p>
-        <a class="home-card-btn" href="/productos-en-stock">Ver productos</a>
+        <a class="fm-btn fm-btn--primary home-card-btn" href="/productos-en-stock">Ver productos</a>
       </div>
     </div>
 

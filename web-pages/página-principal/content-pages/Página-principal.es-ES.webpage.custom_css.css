@@ -26,7 +26,6 @@ html, body { overflow-x: hidden; }
   text-align: center;
   margin-top: 0;
   margin-bottom: 2.5rem;
-  background-image: url('https://farmingpalencia.sharepoint.com/sites/CRMLibrary/CRM_DEV/Tools/atardecer-farming-agricola.jpg');
   background-size: cover;
   background-position: center;
 }
@@ -96,28 +95,8 @@ html, body { overflow-x: hidden; }
   line-height: 1.55;
   margin: 0 0 1.4rem;
 }
-.home-card-btn {
-  display: inline-flex;
-  align-items: center;
-  justify-content: center;
-  align-self: flex-start;
-  background: var(--fm-brand);
-  color: #ffffff !important;
-  border: 1px solid var(--fm-brand);
-  border-radius: 999px;
-  font-weight: 700;
-  font-size: 1rem;
-  padding: 0.65rem 1.6rem;
-  text-decoration: none !important;
-  transition: background-color 0.15s ease, border-color 0.15s ease;
-  font-family: var(--fm-font);
-}
-.home-card-btn:hover, .home-card-btn:focus {
-  background: var(--fm-brand-700);
-  border-color: var(--fm-brand-700);
-  color: #ffffff !important;
-  text-decoration: none !important;
-}
+/* Solo layout dentro de la card; el look viene de .fm-btn fm-btn--primary. */
+.home-card-btn { align-self: flex-start; }
 
 @media (max-width: 768px) {
   .home-card { flex-direction: column; }

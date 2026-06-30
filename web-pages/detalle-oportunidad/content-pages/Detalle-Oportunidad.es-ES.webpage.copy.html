@@ -116,7 +116,7 @@
 
   <div class="do-top">
     <h1 class="do-title">Resumen de mi pedido</h1>
-    <a class="do-btn do-btn-primary" href="/cpq">Nuevo pedido</a>
+    <a class="fm-btn fm-btn--primary" href="/cpq">Nuevo pedido</a>
   </div>
 
   <div class="do-summary">
@@ -154,9 +154,9 @@
          "Rechazado cliente" (= 6) — a status change, NOT a record delete.
          Editar lands on the Resumen step with the existing config pre-loaded. {% endcomment %}
       {% if o.wi_fase.value == 1 %}
-      <button type="button" id="doEliminar" class="do-btn do-btn-ghost"
+      <button type="button" id="doEliminar" class="fm-btn fm-btn--ghost"
               data-opp-id="{{ o.wi_oportunidadfarmingid }}">Eliminar Borrador</button>
-      <a class="do-btn do-btn-primary" href="/resumen?edit={{ o.wi_oportunidadfarmingid }}">Editar pedido</a>
+      <a class="fm-btn fm-btn--primary" href="/resumen?edit={{ o.wi_oportunidadfarmingid }}">Editar pedido</a>
       {% endif %}
     </div>
   </div>
@@ -247,8 +247,8 @@
     <p class="do-modal-body">El pedido se marcará como rechazado por el cliente. No se eliminará el registro.</p>
     <div id="doModalStatus" class="do-modal-status" style="display:none;"></div>
     <div class="do-modal-actions">
-      <button type="button" id="doModalNo" class="do-btn do-btn-ghost">No</button>
-      <button type="button" id="doModalSi" class="do-btn do-btn-primary">Sí</button>
+      <button type="button" id="doModalNo" class="fm-btn fm-btn--ghost">No</button>
+      <button type="button" id="doModalSi" class="fm-btn fm-btn--primary">Sí</button>
     </div>
   </div>
 </div>

@@ -16,11 +16,6 @@
   .do-title { font-size: 2.2rem; font-weight: 700; color: var(--fm-ink); margin: 0; letter-spacing: -0.01em; }
 
   /* pill buttons */
-  .do-btn { display: inline-flex; align-items: center; justify-content: center; padding: 0.62rem 1.5rem; border-radius: 999px; font-size: 0.95rem; font-weight: 700; text-decoration: none !important; cursor: pointer; border: 1px solid transparent; transition: background 0.15s ease, border-color 0.15s ease, color 0.15s ease; font-family: inherit; }
-  .do-btn-primary { background: var(--fm-brand); color: #fff !important; border: 2px solid #5BC2EC; }
-  .do-btn-primary:hover { background: var(--fm-brand-700); border-color: #5BC2EC; color: #fff !important; }
-  .do-btn-ghost { background: #fff; color: var(--fm-brand) !important; border: 1px solid #b3e3f5; }
-  .do-btn-ghost:hover { background: #f0fafe; border-color: var(--fm-brand); color: var(--fm-brand) !important; }
 
   /* summary bar */
   .do-summary { display: grid; grid-template-columns: repeat(6, 1fr); align-items: start; gap: 1rem; background: #fff; border: 1px solid #eef0f3; border-radius: 16px; box-shadow: 0 2px 14px rgba(20,35,59,0.06); padding: 1.4rem 1.75rem; margin-bottom: 2.2rem; }
@@ -89,4 +84,3 @@
   .do-modal-status { margin: 0 0 1rem; padding: 0.7rem 0.9rem; border-radius: 10px; font-size: 0.9rem; font-weight: 600; line-height: 1.4; }
   .do-modal-status.err { background: #fdeceb; color: #b3261e; border: 1px solid #f5c6c2; }
   .do-modal-status:not(.err) { background: #eaf6fc; color: #0b6a92; border: 1px solid #bfe6f5; }
-  .do-btn-primary:disabled, .do-btn-ghost:disabled { opacity: 0.5; cursor: not-allowed; }

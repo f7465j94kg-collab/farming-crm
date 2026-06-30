@@ -136,11 +136,11 @@
 
       <div id="dpStatus" class="dp-status" style="display:none;"></div>
       <div class="dp-actions">
-        <a class="dp-btn dp-btn-ghost" href="/farming-park">Atrás</a>
+        <a class="fm-btn fm-btn--ghost" href="/farming-park">Atrás</a>
         {% if sold %}
-        <button type="button" id="dpSolicitar" class="dp-btn dp-btn-primary dp-btn-sold" disabled aria-disabled="true">Vendido</button>
+        <button type="button" id="dpSolicitar" class="fm-btn fm-btn--sold" disabled aria-disabled="true">Vendido</button>
         {% else %}
-        <button type="button" id="dpSolicitar" class="dp-btn dp-btn-primary"
+        <button type="button" id="dpSolicitar" class="fm-btn fm-btn--primary"
                 data-stock-id="{{ s.wi_stockid }}"
                 data-precio="{{ s.wi_precio }}"
                 data-cuenta="{{ user.parentcustomerid.id }}"
@@ -156,8 +156,8 @@
     <h3 id="dpModalTitle" class="dp-modal-title">¿Solicitar este producto en stock?</h3>
     <p class="dp-modal-body">Se creará un pedido para este producto y se marcará como vendido en el stock.</p>
     <div class="dp-modal-actions">
-      <button type="button" id="dpModalCancel" class="dp-btn dp-btn-ghost">Cancelar</button>
-      <button type="button" id="dpModalConfirm" class="dp-btn dp-btn-primary">Solicitar</button>
+      <button type="button" id="dpModalCancel" class="fm-btn fm-btn--ghost">Cancelar</button>
+      <button type="button" id="dpModalConfirm" class="fm-btn fm-btn--primary">Solicitar</button>
     </div>
   </div>
 </div>

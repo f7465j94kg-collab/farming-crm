@@ -37,6 +37,7 @@
   --fm-brand:        #009FD9;   /* azul de marca */
   --fm-brand-700:    #0080B5;   /* hover */
   --fm-focus-ring:   rgba(0,159,217,0.15);
+  --fm-ghost-border: #b3e3f5;   /* borde del botón fantasma (.fm-btn--ghost) */
 
   /* ---- Texto / tinta ---- */
   --fm-ink:        #15233b;  /* títulos fuertes (.ppp-*, modales) */
@@ -91,6 +92,20 @@
    sobre esos ficheros usando los tokens de arriba; no hace falta mover el CSS.
    Aquí abajo (secciones 3-5) viven SOLO los componentes compartidos por 2+ páginas.
    ============================================================================ */
+
+/* ============================================================================
+   BOTONES (.fm-btn) — componente compartido (botón "pill" del portal)
+   Unifica .cfg-btn / .do-btn / .dp-btn / .pp-* (mismo patrón, distinto prefijo).
+   Uso en markup: class="fm-btn fm-btn--primary" | "fm-btn fm-btn--ghost" | "fm-btn fm-btn--sold"
+   (Las variantes "todo-en-uno" .stk-btn / .home-card-btn se migran en un 2º paso.)
+   ============================================================================ */
+.fm-btn { display: inline-flex; align-items: center; justify-content: center; padding: 0.62rem 1.5rem; border-radius: var(--fm-radius-pill); font-size: 0.95rem; font-weight: 700; font-family: inherit; text-decoration: none !important; cursor: pointer; border: 1px solid transparent; transition: background 0.15s ease, border-color 0.15s ease, color 0.15s ease; }
+.fm-btn--primary { background: var(--fm-brand); color: #fff !important; border-color: var(--fm-brand); }
+.fm-btn--primary:hover { background: var(--fm-brand-700); border-color: var(--fm-brand-700); color: #fff !important; }
+.fm-btn--ghost { background: #fff; color: var(--fm-brand) !important; border-color: var(--fm-ghost-border); }
+.fm-btn--ghost:hover { background: #f0fafe; border-color: var(--fm-brand); color: var(--fm-brand) !important; }
+.fm-btn--sold { background: #c0392b !important; border-color: #c0392b !important; color: #fff !important; cursor: not-allowed; }
+.fm-btn:disabled, .fm-btn--primary:disabled, .fm-btn--ghost:disabled { opacity: 0.5; cursor: not-allowed; }
 
 /* ============================================================================
    3) SISTEMA DE FORMULARIOS (.ppp-form) — peticiones a producto
@@ -216,11 +231,6 @@
   .dp-title { font-size: 2.2rem; font-weight: 700; color: var(--fm-ink); margin: 0; letter-spacing: -0.01em; }
 
   /* pill buttons */
-  .dp-btn { display: inline-flex; align-items: center; justify-content: center; padding: 0.62rem 1.5rem; border-radius: 999px; font-size: 0.95rem; font-weight: 700; text-decoration: none !important; cursor: pointer; border: 1px solid transparent; transition: background 0.15s ease, border-color 0.15s ease, color 0.15s ease; font-family: inherit; }
-  .dp-btn-primary { background: var(--fm-brand); color: #fff !important; border: 2px solid #5BC2EC; }
-  .dp-btn-primary:hover { background: var(--fm-brand-700); border-color: #5BC2EC; color: #fff !important; }
-  .dp-btn-ghost { background: #fff; color: var(--fm-brand) !important; border: 1px solid #b3e3f5; }
-  .dp-btn-ghost:hover { background: #f0fafe; border-color: var(--fm-brand); color: var(--fm-brand) !important; }
 
   /* two-column body */
   .dp-cols { display: flex; gap: 1.6rem; align-items: flex-start; }
@@ -275,11 +285,9 @@
   .dp-status.ok { background: #e8f8ef; color: #1c7a47; border: 1px solid #b7e6cb; }
   .dp-status.err { background: #fdeceb; color: #b3261e; border: 1px solid #f5c6c2; }
   .dp-status:not(.ok):not(.err) { background: #eaf6fc; color: #0b6a92; border: 1px solid #bfe6f5; }
-  .dp-btn-primary:disabled { opacity: 0.5; cursor: not-allowed; }
 
   /* sold state: VENDIDO stamp next to the title + greyed-out sold button */
   .dp-vendido { display: inline-block; vertical-align: middle; margin-left: 0.6rem; transform: rotate(-6deg); padding: 0.22em 0.7em; border: 2px solid #c0392b; border-radius: 8px; color: #c0392b; background: rgba(192,57,43,0.06); font-size: 0.95rem; font-weight: 800; letter-spacing: 0.12em; text-transform: uppercase; }
-  .dp-btn-sold { background: #c0392b !important; border-color: #c0392b !important; opacity: 1; cursor: not-allowed; }
 
   /* confirmation modal */
   .dp-modal-overlay { position: fixed; inset: 0; background: rgba(0,0,0,0.45); display: flex; align-items: center; justify-content: center; z-index: 1000; padding: 1rem; }
@@ -321,9 +329,8 @@
   .stk-char .k { color: var(--fm-muted-2); font-weight: 700; text-transform: uppercase; letter-spacing: 0.03em; font-size: 0.7rem; flex: 0 0 auto; }
   .stk-char .v { color: var(--fm-ink-3); font-weight: 600; text-align: right; overflow: hidden; text-overflow: ellipsis; white-space: nowrap; }
   .stk-char.precio .v { color: var(--fm-brand); font-weight: 800; font-size: 0.95rem; }
-  .stk-btn { margin-top: auto; align-self: flex-start; display: inline-flex; align-items: center; justify-content: center; width: auto; box-sizing: border-box; padding: 0.6rem 1.4rem; border: none; border-radius: 999px; background: var(--fm-brand); color: #fff !important; font-size: 0.9rem; font-weight: 700; cursor: pointer; text-decoration: none !important; transition: background 0.15s ease, transform 0.1s ease; }
-  .stk-btn:hover { background: var(--fm-brand-700); color: #fff !important; }
-  .stk-btn:active { transform: translateY(1px); }
+  /* Solo layout dentro de la card; el look viene de .fm-btn fm-btn--primary. */
+  .stk-btn { margin-top: auto; align-self: flex-start; }
 
   .stk-facet { background: #fff; border: 1px solid var(--fm-border); border-radius: 14px; box-shadow: 0 2px 12px rgba(0,0,0,0.05); padding: 1rem 1.1rem; }
   .stk-facet-head { font-size: 0.78rem; font-weight: 800; letter-spacing: 0.05em; text-transform: uppercase; color: var(--fm-muted-2); margin-bottom: 0.7rem; }
@@ -373,14 +380,8 @@
   .pp-lbl { color: var(--fm-muted-2); font-size: 0.72rem; font-weight: 700; letter-spacing: 0.04em; text-transform: uppercase; margin-top: 0.3rem; }
   .pp-empty { color: var(--fm-muted-2); font-size: 1rem; padding: 2.5rem 0; text-align: center; }
 
-  /* Botones de acción: base .pp-btn + modificadores de color. Ambas listas usan
-     class="pp-btn pp-new" / "pp-btn pp-ghost". */
+  /* Contenedor flex de los botones de acción (los botones son .fm-btn). */
   .pp-actions { display: flex; flex-wrap: wrap; align-items: center; gap: 0.75rem; }
-  .pp-btn { display: inline-flex; align-items: center; justify-content: center; padding: 0.62rem 1.4rem; border-radius: 999px; font-size: 0.95rem; font-weight: 700; text-decoration: none !important; transition: background 0.15s ease, border-color 0.15s ease; font-family: inherit; }
-  .pp-new { background: var(--fm-brand); color: #fff !important; border: 1px solid var(--fm-brand); }
-  .pp-new:hover { background: var(--fm-brand-700); border-color: var(--fm-brand-700); color: #fff !important; }
-  .pp-ghost { background: #fff; color: var(--fm-brand) !important; border: 1px solid #b3e3f5; }
-  .pp-ghost:hover { background: #f0fafe; border-color: var(--fm-brand); color: var(--fm-brand) !important; }
 
   /* Tarjeta de la lista. El nº de columnas varía por página: se PASA con la
      variable --pp-card-cols en el .pp-wrap (no se sobreescribe la regla).

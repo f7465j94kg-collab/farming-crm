@@ -68,7 +68,7 @@
               <div class="stk-char"><span class="k">Almacén</span><span class="v">{{ s.wi_almacen.label | escape }}</span></div>
               <div class="stk-char precio"><span class="k">Precio</span><span class="v stk-precio" data-v="{{ s.wi_precio }}">{{ s.wi_precio }}</span></div>
             </div>
-            <a class="stk-btn" href="/detalle-producto-stock?id={{ s.wi_stockid }}">Ver producto</a>
+            <a class="fm-btn fm-btn--primary stk-btn" href="/detalle-producto-stock?id={{ s.wi_stockid }}">Ver producto</a>
           </div>
         </div>
         {% endfor %}
