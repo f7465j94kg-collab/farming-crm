@@ -1,8 +1,8 @@
-{% comment %} Single list of ALL opportunities (Configurador + stock). The
-   wi_productostock lookup distinguishes them: EMPTY => Configurador opportunity
-   (gets the "Configurador" badge); FILLED => stock opportunity (no badge).
+{% comment %} Single list of ALL opportunities (Configurador + stock).
    wi_preciofinal is the Configurador total; for stock opps the price lives in
-   wi_precio, so we select both and pick whichever is set. {% endcomment %}
+   wi_precio, so we select both and pick whichever is set.
+   wi_tipodepedido distinguishes type ("A medida" / "Stock"); falls back to
+   wi_productostock presence for records that predate the column. {% endcomment %}
 {% fetchxml oportunidades %}
 <fetch count="250">
   <entity name="wi_oportunidadfarming">
@@ -14,6 +14,7 @@
     <attribute name="wi_productostock" />
     <attribute name="wi_precio" />
     <attribute name="wi_preciofinal" />
+    <attribute name="wi_tipodepedido" />
     <attribute name="createdon" />
     <attribute name="modifiedon" />
     <order attribute="modifiedon" descending="true" />
@@ -45,7 +46,7 @@
 <!-- Estilos .pp-* en web-files/farming.css (global vía Header). Esta página no
      define estilos: solo fija el nº de columnas de su tarjeta con --pp-card-cols. -->
 
-<div class="pp-wrap" style="--pp-card-cols: 1.5fr 1fr 1fr 1.1fr 1fr;">
+<div class="pp-wrap" style="--pp-card-cols: 1.5fr 1fr 1fr 1.1fr 1fr 1fr;">
   <div class="pp-top">
     <h1 class="fm-title pp-title">{{ pageName | escape }}</h1>
     <div class="pp-actions">
@@ -80,6 +81,8 @@
     {% assign isStock = false %}
     {% if o.wi_productostock and o.wi_productostock.id %}{% assign isStock = true %}{% endif %}
     {% if isStock %}{% assign precio = o.wi_precio %}{% else %}{% assign precio = o.wi_preciofinal %}{% endif %}
+    {% assign tipoPedido = o.wi_tipodepedido.label %}
+    {% if tipoPedido == '' or tipoPedido == nil %}{% if isStock %}{% assign tipoPedido = 'Stock' %}{% else %}{% assign tipoPedido = 'A medida' %}{% endif %}{% endif %}
     <div class="fm-surface pp-card"
          data-estado="{{ o.wi_fase.label | escape }}"
          data-search="{{ o.wi_idoportunidad | escape }} {{ o.wi_fase.label | escape }} {{ o.wi_cuenta.name | escape }} {{ o.wi_productobasef.name | escape }}">
@@ -110,11 +113,10 @@
         <div class="pp-val pp-precio" data-v="{{ precio }}">{{ precio }}</div>
         <div class="pp-lbl">PRECIO</div>
       </div>
-      {% comment %} Configurador badge: ONLY when this is a Configurador opp
-         (wi_productostock empty). Sits at the end of the card. {% endcomment %}
-      {% unless isStock %}
-      <span class="pp-badge-cfg">Configurador</span>
-      {% endunless %}
+      <div class="pp-col">
+        <div class="pp-val">{{ tipoPedido }}</div>
+        <div class="pp-lbl">TIPO DE PEDIDO</div>
+      </div>
     </div>
     {% endfor %}
   </div>
