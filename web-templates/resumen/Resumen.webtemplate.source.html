@@ -287,6 +287,7 @@
       'wi_ProductoBaseF@odata.bind': '/' + SET_PBF + '(' + s.productobase.id + ')',
       'wi_fase': fase
     };
+    oppPayload.wi_configjson = JSON.stringify(s);
     if (comentario) oppPayload.wi_comentarios = comentario;
     if (CUENTA_ID) oppPayload['wi_Cuenta@odata.bind'] = '/accounts(' + CUENTA_ID + ')';
     if (CONTACTO_ID) oppPayload['wi_Contacto@odata.bind'] = '/contacts(' + CONTACTO_ID + ')';
@@ -312,6 +313,7 @@
       oppPayload['wi_ProductoBaseF@odata.bind'] = '/' + SET_PBF + '(' + s.productobase.id + ')';
     }
     oppPayload.wi_comentarios = comentario || null;
+    oppPayload.wi_configjson = JSON.stringify(s);
     return apiPatch(SET_OPP, oppId, oppPayload, token).then(function () {
       showStatus('Pedido actualizado. Reconciliando líneas...');
       // Fetch the opp's current line items so we can delete them before re-creating.

@@ -94,7 +94,7 @@
   // the model name in a separate, optional GET.
   function fetchOpp(oppId) {
     var url = '/_api/wi_oportunidadfarmings(' + oppId + ')' +
-              '?$select=wi_oportunidadfarmingid,_wi_productobasef_value,wi_precioproductobase,wi_comentarios,wi_fase';
+              '?$select=wi_oportunidadfarmingid,_wi_productobasef_value,wi_precioproductobase,wi_comentarios,wi_fase,wi_configjson';
     return apiGet(url).catch(function () { return {}; });
   }
   function fetchLines(oppId) {
@@ -114,6 +114,22 @@
     if (!oppId) return Promise.resolve(null);
     return fetchOpp(oppId).then(function (opp) {
       opp = opp || {};
+      // Preferred: the full saved configuration (keeps fabricante/producto/n1..n4/
+      // opcionales ids, so the draft is fully re-editable in every wizard step).
+      if (opp.wi_configjson) {
+        var saved = null;
+        try { saved = JSON.parse(opp.wi_configjson); } catch (e) { saved = null; }
+        if (saved && typeof saved === 'object') {
+          saved.__editId = oppId;
+          saved.__opcReached = true;
+          if (opp.wi_comentarios) saved.__comentarios = opp.wi_comentarios;
+          save(saved);
+          return saved;
+        }
+      }
+      // Fallback (older drafts with no wi_configjson): rebuild from line items.
+      // Labels/prices are restored but ids are empty, so re-picking inside the
+      // N1..N4/Opcionales steps is limited; Resumen + save still work.
       var pbId = opp._wi_productobasef_value || '';
       return fetchModelo(pbId).then(function (pbf) {
         return fetchLines(oppId).then(function (lines) {
