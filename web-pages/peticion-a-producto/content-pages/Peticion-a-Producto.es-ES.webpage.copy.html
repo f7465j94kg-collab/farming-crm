@@ -46,16 +46,16 @@
         <a class="pp-detalle" href="/Detalle-Peticion-a-Producto?id={{ p.wi_peticionaproductoid }}">Ver detalle</a>
       </div>
       <div class="pp-col">
-        <div class="pp-val">{{ p.wi_tipo.label | default: '—' | escape }}</div>
         <div class="pp-lbl">TIPO</div>
+        <div class="pp-val">{{ p.wi_tipo.label | default: '—' | escape }}</div>
       </div>
       <div class="pp-col">
-        <div class="pp-val">{{ p.wi_cuenta.name | default: '—' | escape }}</div>
         <div class="pp-lbl">CUENTA</div>
+        <div class="pp-val">{{ p.wi_cuenta.name | default: '—' | escape }}</div>
       </div>
       <div class="pp-col">
-        <div class="pp-val">{{ p.createdon | date: 'dd/MM/yyyy' }}</div>
         <div class="pp-lbl">FECHA DE PETICIÓN</div>
+        <div class="pp-val">{{ p.createdon | date: 'dd/MM/yyyy' }}</div>
       </div>
     </div>
     {% endfor %}

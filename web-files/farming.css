@@ -397,7 +397,9 @@
   .pp-estado { color: var(--fm-text); font-size: 0.95rem; margin-top: 0.35rem; }
   .pp-detalle { display: inline-block; margin-top: 0.45rem; color: var(--fm-brand) !important; font-size: 0.95rem; text-decoration: underline !important; }
   .pp-val { color: var(--fm-ink-3); font-size: 1rem; }
-  .pp-lbl { color: var(--fm-muted-2); font-size: 0.72rem; font-weight: 700; letter-spacing: 0.04em; text-transform: uppercase; margin-top: 0.3rem; }
+  /* Label now sits ABOVE its value (.pp-lbl before .pp-val in the markup); the
+     0.3rem gap goes below the label, between it and the value. */
+  .pp-lbl { color: var(--fm-muted-2); font-size: 0.72rem; font-weight: 700; letter-spacing: 0.04em; text-transform: uppercase; margin-bottom: 0.3rem; }
   .pp-empty { color: var(--fm-muted-2); font-size: 1rem; padding: 2.5rem 0; text-align: center; }
 
   /* Contenedor flex de los botones de acción (los botones son .fm-btn). */

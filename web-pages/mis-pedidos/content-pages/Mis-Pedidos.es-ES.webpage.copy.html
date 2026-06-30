@@ -98,24 +98,24 @@
         {% endif %}
       </div>
       <div class="pp-col">
-        <div class="pp-val">{{ o.wi_cuenta.name | default: '—' | escape }}</div>
         <div class="pp-lbl">CUENTA</div>
+        <div class="pp-val">{{ o.wi_cuenta.name | default: '—' | escape }}</div>
       </div>
       <div class="pp-col">
-        <div class="pp-val">{{ o.wi_productobasef.name | default: '—' | escape }}</div>
         <div class="pp-lbl">PRODUCTO</div>
+        <div class="pp-val">{{ o.wi_productobasef.name | default: '—' | escape }}</div>
       </div>
       <div class="pp-col">
-        <div class="pp-val">{{ o.modifiedon | date: 'dd/MM/yyyy' }}</div>
         <div class="pp-lbl">FECHA DE PEDIDO</div>
+        <div class="pp-val">{{ o.modifiedon | date: 'dd/MM/yyyy' }}</div>
       </div>
       <div class="pp-col">
-        <div class="pp-val pp-precio" data-v="{{ precio }}">{{ precio }}</div>
         <div class="pp-lbl">PRECIO</div>
+        <div class="pp-val pp-precio" data-v="{{ precio }}">{{ precio }}</div>
       </div>
       <div class="pp-col">
-        <div class="pp-val">{{ tipoPedido }}</div>
         <div class="pp-lbl">TIPO DE PEDIDO</div>
+        <div class="pp-val">{{ tipoPedido }}</div>
       </div>
     </div>
     {% endfor %}
