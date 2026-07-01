@@ -29,7 +29,49 @@
 </fetch>
 {% endfetchxml %}
 
+{% comment %} The pedido (wi_oportunidadfarming) linked to this stock via
+   wi_ProductoStock. Present once the unit has been requested (sold); gives us
+   the fase/estado, order code, cuenta and date to show — the same info Mis
+   Pedidos shows. Absent while the unit is just being browsed from the catalog. {% endcomment %}
+{% fetchxml oppForStock %}
+<fetch top="1">
+  <entity name="wi_oportunidadfarming">
+    <attribute name="wi_oportunidadfarmingid" />
+    <attribute name="wi_idoportunidad" />
+    <attribute name="wi_fase" />
+    <attribute name="wi_cuenta" />
+    <attribute name="wi_precio" />
+    <attribute name="createdon" />
+    <attribute name="modifiedon" />
+    <order attribute="createdon" descending="true" />
+    {% if sid %}
+    <filter type="and">
+      <condition attribute="wi_productostock" operator="eq" value="{{ sid | xml_escape }}" />
+    </filter>
+    {% endif %}
+  </entity>
+</fetch>
+{% endfetchxml %}
+
+{% comment %} Dynamic label for the "Mis Pedidos" breadcrumb/back link: resolve
+   that page's current adx_name by its stable root GUID so a studio rename
+   propagates. Same mechanism as the home card and Detalle-Oportunidad. {% endcomment %}
+{% fetchxml oppPage %}
+<fetch top="1">
+  <entity name="adx_webpage">
+    <attribute name="adx_name" />
+    <attribute name="adx_title" />
+    <filter type="and">
+      <condition attribute="adx_webpageid" operator="eq" value="48d3eb85-a348-7c23-07d5-af362e829b3c" />
+    </filter>
+  </entity>
+</fetch>
+{% endfetchxml %}
+{% assign oppListRec = oppPage.results.entities.first %}
+{% assign oppListTitle = oppListRec.adx_name | default: oppListRec.adx_title | default: 'Mis pedidos' %}
+
 {% assign s = stock.results.entities.first %}
+{% assign opp = oppForStock.results.entities.first %}
 
 <!-- Estilos (.dp-* / .stk-*) movidos a la hoja compartida web-files/farming.css
      (cargada globalmente via el Header). No reintroducir un <style> aqui.
@@ -46,17 +88,53 @@
 
 <div class="dp-wrap">
   <nav class="dp-bc">
+    {% if opp %}
+    <a href="/Oportunidades">{{ oppListTitle | escape }}</a>
+    {% else %}
     <a href="/productos-en-stock">Productos en stock</a>
+    {% endif %}
     <span class="sep">/</span>
     <span class="cur">Detalle del producto</span>
   </nav>
 
   <div class="dp-top">
     <h1 class="fm-title dp-title">{{ base | default: 'Detalle del producto' | escape }}</h1>
+    {% if opp %}
+    <a class="fm-btn fm-btn--ghost" href="/Oportunidades">{{ oppListTitle | escape }}</a>
+    {% else %}
     <a class="fm-btn fm-btn--ghost" href="/productos-en-stock">Productos en stock</a>
+    {% endif %}
   </div>
 
   <div class="fm-surface dp-summary">
+    {% if opp %}
+    {% comment %} Pedido view: pull estado/fecha/cuenta/código from the linked opp. {% endcomment %}
+    <div class="col">
+      <div class="lbl">Pedido</div>
+      <div class="val">{{ opp.wi_idoportunidad | default: '—' | escape }}</div>
+    </div>
+    <div class="col">
+      <div class="lbl">Estado</div>
+      <div class="val">{{ opp.wi_fase.label | default: '—' | escape }}</div>
+    </div>
+    <div class="col">
+      <div class="lbl">Cuenta</div>
+      <div class="val">{{ opp.wi_cuenta.name | default: '—' | escape }}</div>
+    </div>
+    <div class="col">
+      <div class="lbl">Producto</div>
+      <div class="val">{{ base | default: '—' | escape }}</div>
+    </div>
+    <div class="col">
+      <div class="lbl">Fecha de pedido</div>
+      <div class="val">{{ opp.modifiedon | date: 'dd/MM/yyyy' }}</div>
+    </div>
+    <div class="col">
+      <div class="lbl">Precio</div>
+      <div class="val dp-precio" data-v="{{ s.wi_precio }}">{{ s.wi_precio }}</div>
+    </div>
+    {% else %}
+    {% comment %} Catalog view: an available unit with no pedido yet. {% endcomment %}
     <div class="col">
       <div class="lbl">Producto</div>
       <div class="val">{{ base | default: '—' | escape }}</div>
@@ -81,6 +159,7 @@
       <div class="lbl">Precio</div>
       <div class="val dp-precio" data-v="{{ s.wi_precio }}">{{ s.wi_precio }}</div>
     </div>
+    {% endif %}
   </div>
 
   <div class="dp-secrow">
