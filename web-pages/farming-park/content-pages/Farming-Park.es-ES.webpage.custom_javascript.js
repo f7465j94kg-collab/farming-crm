@@ -29,12 +29,19 @@
     if (!document.getElementById('stkGrid')) return;
     // format prices (empty => 0 €)
     document.querySelectorAll('.stk-precio').forEach(function (el) { el.textContent = fmtEur(el.getAttribute('data-v')); });
-    // build Fabricante filter from the rendered cards
-    var fabs = {};
-    cards().forEach(function (c) { var f = (c.getAttribute('data-fab') || '').trim(); if (f) fabs[f] = true; });
+    // Build the Fabricante filter ordered by wi_orderlist (data-faborder, asc);
+    // brands with no order collapse into "Otras Marcas" (sentinel 9999 -> last).
+    var order = {};
+    cards().forEach(function (c) {
+      var f = (c.getAttribute('data-fab') || '').trim();
+      if (!f) return;
+      var o = parseFloat(c.getAttribute('data-faborder'));
+      if (isNaN(o)) o = 9999;
+      if (!(f in order) || o < order[f]) order[f] = o;
+    });
     var box = document.getElementById('stkFabFilters');
     if (!box) return;
-    var keys = Object.keys(fabs).sort();
+    var keys = Object.keys(order).sort(function (a, b) { return (order[a] - order[b]) || a.localeCompare(b); });
     if (!keys.length) { box.innerHTML = '<span style="color:#9aa3b2;font-size:0.85rem;">—</span>'; return; }
     keys.forEach(function (f) {
       var lbl = document.createElement('label');

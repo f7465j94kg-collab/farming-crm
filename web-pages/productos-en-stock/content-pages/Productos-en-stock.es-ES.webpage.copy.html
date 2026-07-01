@@ -25,6 +25,11 @@
         <condition attribute="wi_cuenta" operator="eq" value="{{ accountid | xml_escape }}" />
       </filter>
     </link-entity>
+    {% comment %} Pull the manufacturer's wi_orderlist so the Fabricante filter
+       can be sorted by it (see the JS). No number = "Otras Marcas" (last). {% endcomment %}
+    <link-entity name="wi_fabricante" from="wi_fabricanteid" to="wi_fabricante" link-type="outer" alias="fabinfo">
+      <attribute name="wi_orderlist" />
+    </link-entity>
     <order attribute="wi_name" />
   </entity>
 </fetch>
@@ -46,8 +51,13 @@
       {% if stock.results.entities.size > 0 %}
       <div class="stk-grid" id="stkGrid">
         {% for s in stock.results.entities %}
+        {% comment %} Filter key + order: numbered brand -> its own name; no number
+           -> collapsed into "Otras Marcas" (sentinel 9999 sorts last). {% endcomment %}
+        {% assign faborder = s['fabinfo.wi_orderlist'] %}
+        {% if faborder != blank %}{% assign fabkey = s.wi_fabricante.name %}{% else %}{% assign fabkey = 'Otras Marcas' %}{% assign faborder = 9999 %}{% endif %}
         <div class="fm-surface stk-card"
-             data-fab="{{ s.wi_fabricante.name | escape }}"
+             data-fab="{{ fabkey | escape }}"
+             data-faborder="{{ faborder }}"
              data-search="{{ s.wi_productobase.name | escape }} {{ s.wi_name | escape }} {{ s.wi_familia.name | default: s.wi_familia | escape }} {{ s.wi_fabricante.name | escape }} {{ s.wi_almacen.label | escape }}">
           <div class="stk-card-img">
             <img class="stk-bg" src="https://farmingpalencia.sharepoint.com/sites/CRMLibrary/CRM_DEV/Fabricantes/{{ s.wi_fabricante.name | replace: ' ', '%20' }}/{{ s.wi_fabricante.name | replace: ' ', '%20' }}%20fondo.png" alt="" aria-hidden="true" onerror="this.style.display='none'" />
