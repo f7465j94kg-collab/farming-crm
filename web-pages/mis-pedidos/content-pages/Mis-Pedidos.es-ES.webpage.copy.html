@@ -55,15 +55,24 @@
     </div>
   </div>
 
-  <!-- Single controls row (no tabs): estado filter + search, right-aligned -->
+  <!-- Controls: filters (Estado + Tipo de Pedido) on the LEFT, search on the RIGHT -->
   <div class="pp-controlbar">
-    <div class="pp-controls" style="justify-content: flex-end;">
-      <div class="pp-filter" id="ppFilterWrap">
-        <input type="hidden" id="ppEstado" value="" />
-        <button type="button" class="pp-filter-trigger" id="ppFilterTrigger" aria-haspopup="listbox" aria-expanded="false">
-          <span id="ppFilterLabel">Filtrar por Estado</span>
-        </button>
-        <div class="pp-filter-menu" id="ppFilterMenu" role="listbox"></div>
+    <div class="pp-controls" style="width: 100%; justify-content: space-between;">
+      <div class="pp-controls">
+        <div class="pp-filter" id="ppFilterWrap">
+          <input type="hidden" id="ppEstado" value="" />
+          <button type="button" class="pp-filter-trigger" id="ppFilterTrigger" aria-haspopup="listbox" aria-expanded="false">
+            <span id="ppFilterLabel">Filtrar por Estado</span>
+          </button>
+          <div class="pp-filter-menu" id="ppFilterMenu" role="listbox"></div>
+        </div>
+        <div class="pp-filter" id="ppTipoWrap">
+          <input type="hidden" id="ppTipo" value="" />
+          <button type="button" class="pp-filter-trigger" id="ppTipoTrigger" aria-haspopup="listbox" aria-expanded="false">
+            <span id="ppTipoLabel">Filtrar por Tipo de Pedido</span>
+          </button>
+          <div class="pp-filter-menu" id="ppTipoMenu" role="listbox"></div>
+        </div>
       </div>
       <div class="pp-search">
         <input type="text" id="ppSearch" placeholder="Buscar" oninput="ppFilter()" />
@@ -85,7 +94,8 @@
     {% if tipoPedido == '' or tipoPedido == nil %}{% if isStock %}{% assign tipoPedido = 'Stock' %}{% else %}{% assign tipoPedido = 'A medida' %}{% endif %}{% endif %}
     <div class="fm-surface pp-card"
          data-estado="{{ o.wi_fase.label | escape }}"
-         data-search="{{ o.wi_idoportunidad | escape }} {{ o.wi_fase.label | escape }} {{ o.wi_cuenta.name | escape }} {{ o.wi_productobasef.name | escape }}">
+         data-tipo="{{ tipoPedido | escape }}"
+         data-search="{{ o.wi_idoportunidad | escape }} {{ o.wi_fase.label | escape }} {{ o.wi_cuenta.name | escape }} {{ o.wi_productobasef.name | escape }} {{ tipoPedido | escape }}">
       <div class="pp-col pp-col-id">
         <div class="pp-estado">{{ o.wi_fase.label | default: '—' | escape }}</div>
         <div class="pp-code">{{ o.wi_idoportunidad | default: '—' | escape }}</div>

@@ -10,15 +10,18 @@
   function cards() { return Array.prototype.slice.call(document.querySelectorAll('#ppList .pp-card')); }
 
   window.ppFilter = function () {
-    var sel = document.getElementById('ppEstado');
-    var estado = sel ? sel.value : '';
+    var estadoEl = document.getElementById('ppEstado');
+    var estado = estadoEl ? estadoEl.value : '';
+    var tipoEl = document.getElementById('ppTipo');
+    var tipo = tipoEl ? tipoEl.value : '';
     var input = document.getElementById('ppSearch');
     var q = (input ? input.value : '').toLowerCase().trim();
     var visible = 0;
     cards().forEach(function (c) {
       var matchEstado = !estado || (c.getAttribute('data-estado') || '') === estado;
+      var matchTipo = !tipo || (c.getAttribute('data-tipo') || '') === tipo;
       var matchSearch = !q || (c.getAttribute('data-search') || '').toLowerCase().indexOf(q) > -1;
-      var show = matchEstado && matchSearch;
+      var show = matchEstado && matchTipo && matchSearch;
       c.style.display = show ? '' : 'none';
       if (show) visible++;
     });
@@ -27,22 +30,21 @@
   };
 
   // Build a custom dropdown (matches the "Gestión Comercial" header menu).
-  // The chosen estado is kept on the hidden #ppEstado input so ppFilter() is
-  // unchanged. Options are the distinct estados from the cards + the default.
-  var DEFAULT_LABEL = 'Filtrar por Estado';
-
-  function buildFilter() {
-    var wrap = document.getElementById('ppFilterWrap');
-    var trigger = document.getElementById('ppFilterTrigger');
-    var menu = document.getElementById('ppFilterMenu');
-    var hidden = document.getElementById('ppEstado');
-    var label = document.getElementById('ppFilterLabel');
+  // Parameterized so the same builder powers both filters (Estado + Tipo de
+  // Pedido). The chosen value is kept on a hidden input so ppFilter() stays
+  // simple; options are the distinct values found on the cards + the default.
+  function buildFilter(cfg) {
+    var wrap = document.getElementById(cfg.wrap);
+    var trigger = document.getElementById(cfg.trigger);
+    var menu = document.getElementById(cfg.menu);
+    var hidden = document.getElementById(cfg.hidden);
+    var label = document.getElementById(cfg.label);
     if (!wrap || !trigger || !menu || !hidden || !label) return;
 
     var seen = {};
     cards().forEach(function (c) {
-      var e = (c.getAttribute('data-estado') || '').trim();
-      if (e) { seen[e] = true; }
+      var v = (c.getAttribute(cfg.attr) || '').trim();
+      if (v) { seen[v] = true; }
     });
     var values = [''].concat(Object.keys(seen).sort());
 
@@ -53,11 +55,11 @@
       opt.className = 'pp-filter-opt';
       opt.setAttribute('role', 'option');
       opt.setAttribute('data-value', v);
-      opt.textContent = v === '' ? DEFAULT_LABEL : v;
+      opt.textContent = v === '' ? cfg.defaultLabel : v;
       if (v === hidden.value) opt.classList.add('active');
       opt.addEventListener('click', function () {
         hidden.value = v;
-        label.textContent = v === '' ? DEFAULT_LABEL : v;
+        label.textContent = v === '' ? cfg.defaultLabel : v;
         Array.prototype.forEach.call(menu.children, function (ch) { ch.classList.remove('active'); });
         opt.classList.add('active');
         closeMenu();
@@ -66,7 +68,13 @@
       menu.appendChild(opt);
     });
 
-    function openMenu() { wrap.classList.add('open'); trigger.setAttribute('aria-expanded', 'true'); }
+    function openMenu() {
+      // close any other open filter first, so only one is open at a time
+      Array.prototype.forEach.call(document.querySelectorAll('.pp-filter.open'), function (w) {
+        if (w !== wrap) { w.classList.remove('open'); }
+      });
+      wrap.classList.add('open'); trigger.setAttribute('aria-expanded', 'true');
+    }
     function closeMenu() { wrap.classList.remove('open'); trigger.setAttribute('aria-expanded', 'false'); }
 
     trigger.addEventListener('click', function (e) {
@@ -82,7 +90,8 @@
     if (!document.getElementById('ppList')) return;
     // format prices (empty => 0 €)
     document.querySelectorAll('.pp-precio').forEach(function (el) { el.textContent = fmtEur(el.getAttribute('data-v')); });
-    buildFilter();
+    buildFilter({ wrap: 'ppFilterWrap', trigger: 'ppFilterTrigger', menu: 'ppFilterMenu', hidden: 'ppEstado', label: 'ppFilterLabel', attr: 'data-estado', defaultLabel: 'Filtrar por Estado' });
+    buildFilter({ wrap: 'ppTipoWrap', trigger: 'ppTipoTrigger', menu: 'ppTipoMenu', hidden: 'ppTipo', label: 'ppTipoLabel', attr: 'data-tipo', defaultLabel: 'Filtrar por Tipo de Pedido' });
   }
 
   if (document.readyState !== 'loading') { ppInit(); }
