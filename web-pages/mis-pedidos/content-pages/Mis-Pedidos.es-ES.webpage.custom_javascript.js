@@ -55,7 +55,9 @@
       opt.className = 'pp-filter-opt';
       opt.setAttribute('role', 'option');
       opt.setAttribute('data-value', v);
-      opt.textContent = v === '' ? cfg.defaultLabel : v;
+      // Menu's "clear" option can show a distinct word (e.g. "Todos") instead of
+      // repeating the trigger label; falls back to defaultLabel when not set.
+      opt.textContent = v === '' ? (cfg.allLabel || cfg.defaultLabel) : v;
       if (v === hidden.value) opt.classList.add('active');
       opt.addEventListener('click', function () {
         hidden.value = v;
@@ -91,7 +93,7 @@
     // format prices (empty => 0 €)
     document.querySelectorAll('.pp-precio').forEach(function (el) { el.textContent = fmtEur(el.getAttribute('data-v')); });
     buildFilter({ wrap: 'ppFilterWrap', trigger: 'ppFilterTrigger', menu: 'ppFilterMenu', hidden: 'ppEstado', label: 'ppFilterLabel', attr: 'data-estado', defaultLabel: 'Filtrar por Estado' });
-    buildFilter({ wrap: 'ppTipoWrap', trigger: 'ppTipoTrigger', menu: 'ppTipoMenu', hidden: 'ppTipo', label: 'ppTipoLabel', attr: 'data-tipo', defaultLabel: 'Filtrar por Tipo de Pedido' });
+    buildFilter({ wrap: 'ppTipoWrap', trigger: 'ppTipoTrigger', menu: 'ppTipoMenu', hidden: 'ppTipo', label: 'ppTipoLabel', attr: 'data-tipo', defaultLabel: 'Filtrar Pedidos', allLabel: 'Todos' });
   }
 
   if (document.readyState !== 'loading') { ppInit(); }
