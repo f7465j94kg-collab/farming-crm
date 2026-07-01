@@ -41,8 +41,8 @@
          data-estado="{{ p.wi_estado.label | escape }}"
          data-search="{{ p.wi_idpeticion | escape }} {{ p.wi_titulo | escape }} {{ p.wi_tipo.label | escape }} {{ p.wi_cuenta.name | escape }} {{ p.wi_estado.label | escape }}">
       <div class="pp-col pp-col-id">
-        <div class="pp-code">{{ p.wi_idpeticion | default: '—' | escape }}</div>
         <div class="pp-estado">{{ p.wi_estado.label | default: '—' | escape }}</div>
+        <div class="pp-code">{{ p.wi_idpeticion | default: '—' | escape }}</div>
         <a class="pp-detalle" href="/Detalle-Peticion-a-Producto?id={{ p.wi_peticionaproductoid }}">Ver detalle</a>
       </div>
       <div class="pp-col">

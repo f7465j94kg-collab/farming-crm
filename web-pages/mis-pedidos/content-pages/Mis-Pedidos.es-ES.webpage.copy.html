@@ -87,8 +87,8 @@
          data-estado="{{ o.wi_fase.label | escape }}"
          data-search="{{ o.wi_idoportunidad | escape }} {{ o.wi_fase.label | escape }} {{ o.wi_cuenta.name | escape }} {{ o.wi_productobasef.name | escape }}">
       <div class="pp-col pp-col-id">
-        <div class="pp-code">{{ o.wi_idoportunidad | default: '—' | escape }}</div>
         <div class="pp-estado">{{ o.wi_fase.label | default: '—' | escape }}</div>
+        <div class="pp-code">{{ o.wi_idoportunidad | default: '—' | escape }}</div>
         {% comment %} Stock request -> ficha del producto en stock (wi_productostock);
            Configurador -> detalle de la oportunidad. {% endcomment %}
         {% if isStock %}

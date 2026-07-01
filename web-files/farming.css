@@ -394,7 +394,7 @@
 
   .pp-list { display: flex; flex-direction: column; gap: 1rem; }
   .pp-code { font-size: 1.35rem; font-weight: 700; color: var(--fm-ink); line-height: 1.1; }
-  .pp-estado { color: var(--fm-text); font-size: 0.95rem; margin-top: 0.35rem; }
+  .pp-estado { color: var(--fm-text); font-size: 0.95rem; margin-bottom: 0.35rem; }
   .pp-detalle { display: inline-block; margin-top: 0.45rem; color: var(--fm-brand) !important; font-size: 0.95rem; text-decoration: underline !important; }
   .pp-val { color: var(--fm-ink-3); font-size: 1rem; }
   /* Label now sits ABOVE its value (.pp-lbl before .pp-val in the markup); the
