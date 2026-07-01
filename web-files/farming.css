@@ -251,10 +251,19 @@
   .dp-bc .cur { color: var(--fm-text); }
 
   /* title row */
-  .dp-top { display: flex; flex-wrap: wrap; align-items: center; justify-content: space-between; gap: 1rem; margin-bottom: 1.8rem; }
+  .dp-top { display: flex; flex-wrap: wrap; align-items: center; justify-content: space-between; gap: 1rem; margin-bottom: 1.6rem; }
   .dp-title { font-size: 2.2rem; margin: 0; }   /* H1 detalle: .fm-title (común), tamaño 2.2 propio */
 
-  /* pill buttons */
+  /* quick-facts summary bar (compose with .fm-surface). Wraps on narrow screens.
+     Label on top, value below (same as the pp-* / do-* cards). */
+  .dp-summary { display: grid; grid-template-columns: repeat(auto-fit, minmax(140px, 1fr)); align-items: start; gap: 1rem; padding: 1.4rem 1.75rem; margin-bottom: 2.2rem; }
+  .dp-summary .lbl { color: var(--fm-muted-2); font-size: 0.7rem; font-weight: 700; letter-spacing: 0.04em; text-transform: uppercase; margin-bottom: 0.35rem; }
+  .dp-summary .val { color: var(--fm-ink); font-size: 1.05rem; font-weight: 700; line-height: 1.2; word-break: break-word; }
+
+  /* section heading + actions row */
+  .dp-secrow { display: flex; flex-wrap: wrap; align-items: center; justify-content: space-between; gap: 1rem; margin-bottom: 1.4rem; }
+  .dp-sectitle { font-size: 1.45rem; font-weight: 700; color: var(--fm-ink); margin: 0; }
+  .dp-secactions { display: flex; gap: 0.7rem; flex-wrap: wrap; }
 
   /* two-column body */
   .dp-cols { display: flex; gap: 1.6rem; align-items: flex-start; }

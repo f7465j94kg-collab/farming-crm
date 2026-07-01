@@ -32,7 +32,9 @@
 {% assign s = stock.results.entities.first %}
 
 <!-- Estilos (.dp-* / .stk-*) movidos a la hoja compartida web-files/farming.css
-     (cargada globalmente via el Header). No reintroducir un <style> aqui. -->
+     (cargada globalmente via el Header). No reintroducir un <style> aqui.
+     Layout espejo del Detalle de Oportunidad (.do-*): franja resumen + fila de
+     seccion + dos columnas, con los campos propios de un Stock. -->
 
 {% if s %}
 {% assign fab = s.wi_fabricante.name %}
@@ -50,8 +52,53 @@
   </nav>
 
   <div class="dp-top">
-    <h1 class="fm-title dp-title">{{ base | default: 'Detalle del producto' | escape }}{% if sold %} <span class="dp-vendido">Vendido</span>{% endif %}</h1>
+    <h1 class="fm-title dp-title">{{ base | default: 'Detalle del producto' | escape }}</h1>
+    <a class="fm-btn fm-btn--ghost" href="/productos-en-stock">Productos en stock</a>
   </div>
+
+  <div class="fm-surface dp-summary">
+    <div class="col">
+      <div class="lbl">Producto</div>
+      <div class="val">{{ base | default: '—' | escape }}</div>
+    </div>
+    <div class="col">
+      <div class="lbl">Estado</div>
+      <div class="val">{% if sold %}Vendido{% else %}Disponible{% endif %}</div>
+    </div>
+    <div class="col">
+      <div class="lbl">Fabricante</div>
+      <div class="val">{{ fab | default: '—' | escape }}</div>
+    </div>
+    <div class="col">
+      <div class="lbl">Familia</div>
+      <div class="val">{{ s.wi_familia.name | default: '—' | escape }}</div>
+    </div>
+    <div class="col">
+      <div class="lbl">Almacén</div>
+      <div class="val">{{ s.wi_almacen.label | default: '—' | escape }}</div>
+    </div>
+    <div class="col">
+      <div class="lbl">Precio</div>
+      <div class="val dp-precio" data-v="{{ s.wi_precio }}">{{ s.wi_precio }}</div>
+    </div>
+  </div>
+
+  <div class="dp-secrow">
+    <h2 class="dp-sectitle">Detalle del producto</h2>
+    <div class="dp-secactions">
+      {% if sold %}
+      <button type="button" id="dpSolicitar" class="fm-btn fm-btn--sold" disabled aria-disabled="true">Vendido</button>
+      {% else %}
+      <button type="button" id="dpSolicitar" class="fm-btn fm-btn--primary"
+              data-stock-id="{{ s.wi_stockid }}"
+              data-precio="{{ s.wi_precio }}"
+              data-cuenta="{{ user.parentcustomerid.id }}"
+              data-contacto="{{ user.id }}">Solicitar stock</button>
+      {% endif %}
+    </div>
+  </div>
+
+  <div id="dpStatus" class="dp-status" style="display:none;"></div>
 
   <div class="dp-cols">
     <div class="dp-left">
@@ -67,19 +114,23 @@
             {% endif %}
           </div>
           <div class="dp-prod-info">
-            <h2 class="dp-prod-title">{{ base | default: 'Producto' | escape }}</h2>
+            <h3 class="dp-prod-title">{{ base | default: 'Producto' | escape }}</h3>
             <div class="dp-meta">
               <div class="k">Fabricante</div>
               <div class="v">{{ fab | default: '—' | escape }}</div>
             </div>
             <div class="dp-meta">
-              <div class="k">Producto base</div>
-              <div class="v">{{ base | default: '—' | escape }}</div>
+              <div class="k">Familia</div>
+              <div class="v">{{ s.wi_familia.name | default: '—' | escape }}</div>
+            </div>
+            <div class="dp-meta">
+              <div class="k">Modelo</div>
+              <div class="v">{{ s.wi_name | default: '—' | escape }}</div>
             </div>
           </div>
         </div>
         {% if desc and desc != '' %}
-        <div style="margin-top:1.4rem;border-top:1px solid #f0f2f5;padding-top:1.3rem;">
+        <div style="margin-top:1.4rem;border-top:1px solid var(--fm-divider);padding-top:1.3rem;">
           <h4 class="dp-desc-title">Descripción</h4>
           <div class="dp-desc">{{ desc | escape | newline_to_br }}</div>
         </div>
@@ -132,20 +183,6 @@
           <span class="t-lbl">Precio</span>
           <span class="t-amt dp-precio" data-v="{{ s.wi_precio }}">{{ s.wi_precio }}</span>
         </div>
-      </div>
-
-      <div id="dpStatus" class="dp-status" style="display:none;"></div>
-      <div class="dp-actions">
-        <a class="fm-btn fm-btn--ghost" href="/productos-en-stock">Atrás</a>
-        {% if sold %}
-        <button type="button" id="dpSolicitar" class="fm-btn fm-btn--sold" disabled aria-disabled="true">Vendido</button>
-        {% else %}
-        <button type="button" id="dpSolicitar" class="fm-btn fm-btn--primary"
-                data-stock-id="{{ s.wi_stockid }}"
-                data-precio="{{ s.wi_precio }}"
-                data-cuenta="{{ user.parentcustomerid.id }}"
-                data-contacto="{{ user.id }}">Solicitar stock</button>
-        {% endif %}
       </div>
     </div>
   </div>
