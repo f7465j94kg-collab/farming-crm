@@ -287,6 +287,7 @@
       'wi_ProductoBaseF@odata.bind': '/' + SET_PBF + '(' + s.productobase.id + ')',
       'wi_fase': fase
     };
+    s.__step = 'resumen'; // saved from the summary -> editing reopens at the summary
     oppPayload.wi_configjson = JSON.stringify(s);
     if (comentario) oppPayload.wi_comentarios = comentario;
     if (CUENTA_ID) oppPayload['wi_Cuenta@odata.bind'] = '/accounts(' + CUENTA_ID + ')';
@@ -313,6 +314,7 @@
       oppPayload['wi_ProductoBaseF@odata.bind'] = '/' + SET_PBF + '(' + s.productobase.id + ')';
     }
     oppPayload.wi_comentarios = comentario || null;
+    s.__step = 'resumen'; // saved from the summary -> editing reopens at the summary
     oppPayload.wi_configjson = JSON.stringify(s);
     return apiPatch(SET_OPP, oppId, oppPayload, token).then(function () {
       showStatus('Pedido actualizado. Reconciliando líneas...');

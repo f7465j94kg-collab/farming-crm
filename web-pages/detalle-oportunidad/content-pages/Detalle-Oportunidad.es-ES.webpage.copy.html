@@ -152,11 +152,12 @@
       {% comment %} Eliminar Borrador + Editar only for Presupuesto / Borrador (wi_fase == 1).
          "Eliminar Borrador" opens a confirmation modal that PATCHes wi_fase to
          "Rechazado cliente" (= 6) — a status change, NOT a record delete.
-         Editar lands on the Resumen step with the existing config pre-loaded. {% endcomment %}
+         Editar enters the configurador (/cpq?edit=); Configurador Core loads the
+         saved config and reopens it at the step where it was left (not the summary). {% endcomment %}
       {% if o.wi_fase.value == 1 %}
       <button type="button" id="doEliminar" class="fm-btn fm-btn--ghost"
               data-opp-id="{{ o.wi_oportunidadfarmingid }}">Eliminar Borrador</button>
-      <a class="fm-btn fm-btn--primary" href="/resumen?edit={{ o.wi_oportunidadfarmingid }}">Editar pedido</a>
+      <a class="fm-btn fm-btn--primary" href="/cpq?edit={{ o.wi_oportunidadfarmingid }}">Editar pedido</a>
       {% endif %}
     </div>
   </div>

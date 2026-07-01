@@ -69,6 +69,9 @@
       toast('Selecciona primero un modelo (Producto Base) para guardar el borrador.', 'err');
       return;
     }
+    // Remember the step this draft is being saved from, so "Editar" reopens it
+    // right here (in the wizard) instead of the summary.
+    if (window.CFG.currentStep) { var st = window.CFG.currentStep(); if (st) { s.__step = st; } }
     var btn = document.getElementById('cfgGuardarBtn'); if (btn) btn.disabled = true;
     toast('Guardando borrador...');
     var oppId = window.CFG.editId ? window.CFG.editId() : null;

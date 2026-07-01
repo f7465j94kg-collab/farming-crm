@@ -168,8 +168,19 @@
     var m = location.search.match(/[?&]edit=([^&]+)/);
     if (!m) return;
     var oppId = decodeURIComponent(m[1]).replace(/[{}]/g, '');
-    if (editId() === oppId) return; // already loaded this opp into state
-    loadEdit(oppId).catch(function (e) {
+    // Reopen the draft at the step where it was left (not the summary). urlFor()
+    // builds the same query-param URL a normal "Siguiente" would, so the step
+    // page fetches its options and pre-selects the saved choice. Only redirect
+    // when that target is a DIFFERENT page than the one we're on (avoids loops;
+    // the target URL carries no ?edit=, so bootstrapEdit is a no-op there).
+    function resume() {
+      var target = urlFor(resumeStep());
+      if (target && target.split('?')[0].toLowerCase() !== (location.pathname || '').toLowerCase()) {
+        location.replace(target);
+      }
+    }
+    if (editId() === oppId) { resume(); return; } // state already loaded this session
+    loadEdit(oppId).then(resume).catch(function (e) {
       try { console.error('Configurador edit load failed:', e); } catch (x) {}
     });
   }
@@ -186,6 +197,22 @@
     var parts = Number(n || 0).toFixed(2).split('.');
     var intPart = parts[0].replace(/\B(?=(\d{3})+(?!\d))/g, '.'); // Spanish thousands '.'
     return (parts[1] === '00' ? intPart : intPart + ',' + parts[1]) + ' €';
+  }
+
+  // Reverse-map the current URL to its step key (used to record where a draft
+  // is saved, so editing it later can reopen at that same step).
+  function currentStep() {
+    var path = (location.pathname || '').replace(/\/+$/, '').toLowerCase() || '/';
+    for (var k in PAGE) { if (PAGE.hasOwnProperty(k) && PAGE[k].toLowerCase() === path) return k; }
+    return null;
+  }
+  // The step to reopen when editing a saved draft: the one recorded at save time
+  // (s.__step). Legacy drafts without it fall back to the summary (the previous
+  // behaviour) since their save point is unknown and their line-item ids may be
+  // missing -- avoids landing on a wizard step that can't fetch its options.
+  function resumeStep() {
+    var s = get();
+    return (s.__step && PAGE[s.__step]) ? s.__step : 'resumen';
   }
 
   function urlFor(key) {
@@ -212,7 +239,8 @@
     get: get, setStep: setStep, setOpcionales: setOpcionales, clear: clearAll,
     markOpcReached: markOpcReached,
     total: total, fmt: fmt, urlFor: urlFor, priceOf: priceOf,
-    editId: editId, setEditId: setEditId, loadEdit: loadEdit
+    editId: editId, setEditId: setEditId, loadEdit: loadEdit,
+    currentStep: currentStep, resumeStep: resumeStep
   };
 
   // Pre-load existing opportunity state when arriving via ?edit=<oppId>.
