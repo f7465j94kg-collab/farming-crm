@@ -164,23 +164,40 @@
   // On any configurador page, if ?edit=<id> is present and we haven't loaded
   // that opp yet, fetch + rebuild before the page renders. Dispatches
   // cfg:changed when done so Resumen (and the stepper) re-render.
+  // Full-screen veil shown while an ?edit= draft loads, so the launcher page
+  // (fabricante) doesn't flash before we redirect to the saved step.
+  function showEditVeil() {
+    if (!document.body || document.getElementById('cfgEditVeil')) return;
+    var v = document.createElement('div');
+    v.id = 'cfgEditVeil';
+    v.setAttribute('style', 'position:fixed;inset:0;z-index:5000;display:flex;align-items:center;justify-content:center;background:#fff;color:var(--fm-muted,#6b7280);font-family:var(--fm-font,sans-serif);font-size:1.05rem;');
+    v.textContent = 'Cargando tu configuración…';
+    document.body.appendChild(v);
+  }
+  function hideEditVeil() { var v = document.getElementById('cfgEditVeil'); if (v && v.parentNode) { v.parentNode.removeChild(v); } }
+
   function bootstrapEdit() {
     var m = location.search.match(/[?&]edit=([^&]+)/);
     if (!m) return;
     var oppId = decodeURIComponent(m[1]).replace(/[{}]/g, '');
+    showEditVeil();
     // Reopen the draft at the step where it was left (not the summary). urlFor()
     // builds the same query-param URL a normal "Siguiente" would, so the step
-    // page fetches its options and pre-selects the saved choice. Only redirect
-    // when that target is a DIFFERENT page than the one we're on (avoids loops;
-    // the target URL carries no ?edit=, so bootstrapEdit is a no-op there).
+    // page fetches its options and pre-selects the saved choice. If that step
+    // URL can't be built (legacy draft w/o usable ids) fall back to the summary.
+    // Only redirect when the target is a DIFFERENT page (avoids loops; the target
+    // URL carries no ?edit=, so bootstrapEdit is a no-op there).
     function resume() {
-      var target = urlFor(resumeStep());
+      var target = urlFor(resumeStep()) || urlFor('resumen') || PAGE.resumen;
       if (target && target.split('?')[0].toLowerCase() !== (location.pathname || '').toLowerCase()) {
         location.replace(target);
+      } else {
+        hideEditVeil(); // already on the right page -> reveal it
       }
     }
     if (editId() === oppId) { resume(); return; } // state already loaded this session
     loadEdit(oppId).then(resume).catch(function (e) {
+      hideEditVeil();
       try { console.error('Configurador edit load failed:', e); } catch (x) {}
     });
   }
@@ -243,6 +260,9 @@
     currentStep: currentStep, resumeStep: resumeStep
   };
 
+  // "Nuevo pedido" entry (/cpq?nuevo=1): start a clean configuration so a new
+  // order can't accidentally PATCH a previously-edited draft (stale __editId).
+  if (/[?&]nuevo=1/.test(location.search)) { clearAll(); }
   // Pre-load existing opportunity state when arriving via ?edit=<oppId>.
   bootstrapEdit();
 })();
