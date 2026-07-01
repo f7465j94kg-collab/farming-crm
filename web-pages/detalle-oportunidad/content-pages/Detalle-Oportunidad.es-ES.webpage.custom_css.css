@@ -77,14 +77,5 @@
 
   .do-notfound { background: #fff; border: 1px solid #eef0f3; border-radius: 16px; padding: 2.5rem; text-align: center; color: var(--fm-muted-2); font-size: 1rem; }
 
-  /* confirmation modal (mirrors the stock page pattern) */
-  .do-modal-overlay { position: fixed; inset: 0; background: rgba(0,0,0,0.45); display: flex; align-items: center; justify-content: center; z-index: 1000; padding: 1rem; }
-  .do-modal-overlay.do-hidden { display: none; }
-  .do-modal { background: #fff; border-radius: 16px; box-shadow: var(--fm-shadow-modal); width: 100%; max-width: 440px; padding: 1.7rem 1.7rem 1.4rem; font-family: var(--fm-font); color: var(--fm-ink); animation: doModalIn 0.18s ease-out; }
-  @keyframes doModalIn { from { opacity: 0; transform: translateY(8px) scale(0.97); } to { opacity: 1; transform: translateY(0) scale(1); } }
-  .do-modal-title { font-size: 1.25rem; font-weight: 700; color: var(--fm-ink); margin: 0 0 0.6rem; letter-spacing: -0.01em; }
-  .do-modal-body { font-size: 0.95rem; color: var(--fm-text); line-height: 1.5; margin: 0 0 1.5rem; }
-  .do-modal-actions { display: flex; justify-content: flex-end; gap: 0.7rem; flex-wrap: wrap; }
-  .do-modal-status { margin: 0 0 1rem; padding: 0.7rem 0.9rem; border-radius: 10px; font-size: 0.9rem; font-weight: 600; line-height: 1.4; }
-  .do-modal-status.err { background: #fdeceb; color: #b3261e; border: 1px solid #f5c6c2; }
-  .do-modal-status:not(.err) { background: #eaf6fc; color: #0b6a92; border: 1px solid #bfe6f5; }
+  /* Modal de confirmación: definición compartida en web-files/farming.css
+     (.do-modal-* agrupado con .dp-/.rsm-). No re-declarar aquí. */

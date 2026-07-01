@@ -313,14 +313,23 @@
   /* sold state: VENDIDO stamp next to the title + greyed-out sold button */
   .dp-vendido { display: inline-block; vertical-align: middle; margin-left: 0.6rem; transform: rotate(-6deg); padding: 0.22em 0.7em; border: 2px solid #c0392b; border-radius: 8px; color: #c0392b; background: rgba(192,57,43,0.06); font-size: 0.95rem; font-weight: 800; letter-spacing: 0.12em; text-transform: uppercase; }
 
-  /* confirmation modal */
-  .dp-modal-overlay { position: fixed; inset: 0; background: rgba(0,0,0,0.45); display: flex; align-items: center; justify-content: center; z-index: 1000; padding: 1rem; }
-  .dp-modal-overlay.dp-hidden { display: none; }
-  .dp-modal { background: #fff; border-radius: 16px; box-shadow: var(--fm-shadow-modal); width: 100%; max-width: 440px; padding: 1.7rem 1.7rem 1.4rem; font-family: var(--fm-font); color: var(--fm-ink); animation: dpModalIn 0.18s ease-out; }
-  @keyframes dpModalIn { from { opacity: 0; transform: translateY(8px) scale(0.97); } to { opacity: 1; transform: translateY(0) scale(1); } }
-  .dp-modal-title { font-size: 1.25rem; font-weight: 700; color: var(--fm-ink); margin: 0 0 0.6rem; letter-spacing: -0.01em; }
-  .dp-modal-body { font-size: 0.95rem; color: var(--fm-text); line-height: 1.5; margin: 0 0 1.5rem; }
-  .dp-modal-actions { display: flex; justify-content: flex-end; gap: 0.7rem; flex-wrap: wrap; }
+  /* ============================================================================
+     MODAL de confirmación — definición ÚNICA compartida por los 3 prefijos que el
+     markup aún usa (.dp-/.do-/.rsm-). Antes duplicada en Detalle-Oportunidad
+     (custom_css) y Resumen (inline); centralizada aquí. Un solo keyframe fmModalIn.
+     Los nombres de clase del markup/JS NO cambian (dedup solo de CSS).
+     ============================================================================ */
+  .dp-modal-overlay, .do-modal-overlay, .rsm-modal-overlay { position: fixed; inset: 0; background: rgba(0,0,0,0.45); display: flex; align-items: center; justify-content: center; z-index: 1000; padding: 1rem; }
+  .dp-modal-overlay.dp-hidden, .do-modal-overlay.do-hidden, .rsm-modal-overlay.rsm-hidden { display: none; }
+  .dp-modal, .do-modal, .rsm-modal { background: #fff; border-radius: 16px; box-shadow: var(--fm-shadow-modal); width: 100%; max-width: 440px; padding: 1.7rem 1.7rem 1.4rem; font-family: var(--fm-font); color: var(--fm-ink); animation: fmModalIn 0.18s ease-out; }
+  @keyframes fmModalIn { from { opacity: 0; transform: translateY(8px) scale(0.97); } to { opacity: 1; transform: translateY(0) scale(1); } }
+  .dp-modal-title, .do-modal-title, .rsm-modal-title { font-size: 1.25rem; font-weight: 700; color: var(--fm-ink); margin: 0 0 0.6rem; letter-spacing: -0.01em; }
+  .dp-modal-body, .do-modal-body, .rsm-modal-body { font-size: 0.95rem; color: var(--fm-text); line-height: 1.5; margin: 0 0 1.5rem; }
+  .dp-modal-actions, .do-modal-actions, .rsm-modal-actions { display: flex; justify-content: flex-end; gap: 0.7rem; flex-wrap: wrap; }
+  /* status message inside the modal (only Detalle-Oportunidad uses it) */
+  .do-modal-status { margin: 0 0 1rem; padding: 0.7rem 0.9rem; border-radius: 10px; font-size: 0.9rem; font-weight: 600; line-height: 1.4; }
+  .do-modal-status.err { background: #fdeceb; color: #b3261e; border: 1px solid #f5c6c2; }
+  .do-modal-status:not(.err) { background: #eaf6fc; color: #0b6a92; border: 1px solid #bfe6f5; }
 
 /* ============================================================================
    5) LISTADOS DE STOCK / FARMING PARK (.stk-*)
