@@ -23,7 +23,8 @@
   /* summary bar */
   .do-summary { display: grid; grid-template-columns: repeat(6, 1fr); align-items: start; gap: 1rem; background: #fff; border: 1px solid #eef0f3; border-radius: 16px; box-shadow: 0 2px 14px rgba(20,35,59,0.06); padding: 1.4rem 1.75rem; margin-bottom: 2.2rem; }
   .do-summary .val { color: var(--fm-ink); font-size: 1.05rem; font-weight: 700; line-height: 1.2; word-break: break-word; }
-  .do-summary .lbl { color: var(--fm-muted-2); font-size: 0.7rem; font-weight: 700; letter-spacing: 0.04em; text-transform: uppercase; margin-top: 0.35rem; }
+  /* Label sits ABOVE its value (.lbl before .val); gap goes below the label. */
+  .do-summary .lbl { color: var(--fm-muted-2); font-size: 0.7rem; font-weight: 700; letter-spacing: 0.04em; text-transform: uppercase; margin-bottom: 0.35rem; }
 
   /* section heading + actions */
   .do-secrow { display: flex; flex-wrap: wrap; align-items: center; justify-content: space-between; gap: 1rem; margin-bottom: 1.4rem; }

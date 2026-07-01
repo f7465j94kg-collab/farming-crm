@@ -121,28 +121,28 @@
 
   <div class="do-summary">
     <div class="col">
-      <div class="val">{{ o.wi_idoportunidad | default: '—' | escape }}</div>
       <div class="lbl">Pedido</div>
+      <div class="val">{{ o.wi_idoportunidad | default: '—' | escape }}</div>
     </div>
     <div class="col">
-      <div class="val">{{ o.wi_fase.label | default: '—' | escape }}</div>
       <div class="lbl">Estado</div>
+      <div class="val">{{ o.wi_fase.label | default: '—' | escape }}</div>
     </div>
     <div class="col">
-      <div class="val">{{ o.wi_cuenta.name | default: '—' | escape }}</div>
       <div class="lbl">Cuenta</div>
+      <div class="val">{{ o.wi_cuenta.name | default: '—' | escape }}</div>
     </div>
     <div class="col">
-      <div class="val">{{ modelo | default: '—' | escape }}</div>
       <div class="lbl">Producto</div>
+      <div class="val">{{ modelo | default: '—' | escape }}</div>
     </div>
     <div class="col">
-      <div class="val">{{ o.modifiedon | date: 'dd/MM/yyyy' }}</div>
       <div class="lbl">Fecha de pedido</div>
+      <div class="val">{{ o.modifiedon | date: 'dd/MM/yyyy' }}</div>
     </div>
     <div class="col">
-      <div class="val do-precio" data-v="{{ o.wi_preciofinal }}">{{ o.wi_preciofinal }}</div>
       <div class="lbl">Precio total</div>
+      <div class="val do-precio" data-v="{{ o.wi_preciofinal }}">{{ o.wi_preciofinal }}</div>
     </div>
   </div>
 
